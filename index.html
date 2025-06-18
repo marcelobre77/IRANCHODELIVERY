@@ -3,32 +3,498 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Irancho - Delivery de Mercados</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>🛒 IRANCHO - Delivery de Mercados</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #28a745;
+            --secondary-color: #ffc107;
+            --danger-color: #dc3545;
+            --dark-color: #343a40;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), #20c997);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .product-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+        }
+        
+        .btn-warning {
+            background: var(--secondary-color);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+        }
+        
+        .cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1050;
+            overflow-y: auto;
+        }
+        
+        .cart-sidebar.open {
+            right: 0;
+        }
+        
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+            display: none;
+        }
+        
+        .cart-overlay.show {
+            display: block;
+        }
+        
+        .category-filter {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .search-box {
+            border-radius: 25px;
+            border: 2px solid #e9ecef;
+            padding: 12px 20px;
+        }
+        
+        .search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .hero-section {
+                padding: 40px 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <h1>🛒 IRANCHO</h1>
-            <p>Delivery de Mercados</p>
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-shopping-cart me-2"></i>
+                🛒 IRANCHO
+            </a>
+            
+            <div class="d-flex align-items-center">
+                <div class="position-relative me-3">
+                    <button class="btn btn-outline-light" onclick="toggleCart()">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-badge" id="cartBadge">0</span>
+                    </button>
+                </div>
+                
+                <button class="btn btn-warning" onclick="finalizarPedido()">
+                    <i class="fab fa-whatsapp me-1"></i>
+                    Finalizar Pedido
+                </button>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
         <div class="container">
-            <section class="hero">
-                <h2>✅ Sistema Funcionando!</h2>
-                <p>Seu servidor Irancho está rodando perfeitamente!</p>
-                <button onclick="testarAPI()">🔧 Testar API</button>
-            </section>
-
-            <section class="status">
-                <h3>📊 Status do Sistema:</h3>
-                <div id="api-status">Carregando...</div>
-            </section>
+            <h1 class="display-4 fw-bold mb-3">🛒 IRANCHO Delivery</h1>
+            <p class="lead mb-4">Seu mercado online com entrega rápida e produtos frescos!</p>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control search-box" id="searchInput" 
+                               placeholder="🔍 Buscar produtos..." onkeyup="searchProducts()">
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
+    </section>
 
-    <script src="js/app.js"></script>
+    <!-- Filtros de Categoria -->
+    <div class="container mt-4">
+        <div class="category-filter">
+            <h5 class="mb-3">📂 Categorias</h5>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary active" onclick="filterCategory('todos')">Todos</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('frutas')">🍎 Frutas</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('verduras')">🥬 Verduras</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('carnes')">🥩 Carnes</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('laticinios')">🥛 Laticínios</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('bebidas')">🥤 Bebidas</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('limpeza')">🧽 Limpeza</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produtos -->
+    <div class="container">
+        <div class="row" id="productsContainer">
+            <!-- Produtos serão carregados aqui via JavaScript -->
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">🛒 Seu Carrinho</h5>
+                <button class="btn-close" onclick="toggleCart()"></button>
+            </div>
+            
+            <div id="cartItems">
+                <p class="text-muted text-center">Carrinho vazio</p>
+            </div>
+            
+            <div class="border-top pt-3 mt-3">
+                <div class="d-flex justify-content-between mb-3">
+                    <strong>Total: R$ <span id="cartTotal">0,00</span></strong>
+                </div>
+                
+                <button class="btn btn-success w-100 mb-2" onclick="finalizarPedido()">
+                    <i class="fab fa-whatsapp me-1"></i>
+                    Finalizar no WhatsApp
+                </button>
+                
+                <button class="btn btn-outline-danger w-100" onclick="clearCart()">
+                    <i class="fas fa-trash me-1"></i>
+                    Limpar Carrinho
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>🛒 IRANCHO</h5>
+                    <p>Seu delivery de mercados com os melhores produtos e preços!</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>📞 Contato</h5>
+                    <p><i class="fab fa-whatsapp me-2"></i> (11) 99999-9999</p>
+                    <p><i class="fas fa-envelope me-2"></i> contato@irancho.com</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>📍 Entrega</h5>
+                    <p>Entregamos em toda a região metropolitana</p>
+                    <p><strong>Frete Grátis</strong> acima de R$ 50,00</p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2024 IRANCHO Delivery. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dados dos produtos
+        const produtos = [
+            // Frutas
+            { id: 1, nome: "Maçã Gala", preco: 4.99, categoria: "frutas", imagem: "🍎", unidade: "kg" },
+            { id: 2, nome: "Banana Prata", preco: 3.99, categoria: "frutas", imagem: "🍌", unidade: "kg" },
+            { id: 3, nome: "Laranja Lima", preco: 2.99, categoria: "frutas", imagem: "🍊", unidade: "kg" },
+            { id: 4, nome: "Uva Itália", preco: 8.99, categoria: "frutas", imagem: "🍇", unidade: "kg" },
+            
+            // Verduras
+            { id: 5, nome: "Alface Americana", preco: 2.49, categoria: "verduras", imagem: "🥬", unidade: "un" },
+            { id: 6, nome: "Tomate Salada", preco: 5.99, categoria: "verduras", imagem: "🍅", unidade: "kg" },
+            { id: 7, nome: "Cebola Branca", preco: 3.49, categoria: "verduras", imagem: "🧅", unidade: "kg" },
+            { id: 8, nome: "Batata Inglesa", preco: 4.99, categoria: "verduras", imagem: "🥔", unidade: "kg" },
+            
+            // Carnes
+            { id: 9, nome: "Peito de Frango", preco: 12.99, categoria: "carnes", imagem: "🍗", unidade: "kg" },
+            { id: 10, nome: "Carne Moída", preco: 18.99, categoria: "carnes", imagem: "🥩", unidade: "kg" },
+            { id: 11, nome: "Costela Suína", preco: 15.99, categoria: "carnes", imagem: "🥓", unidade: "kg" },
+            
+            // Laticínios
+            { id: 12, nome: "Leite Integral", preco: 4.49, categoria: "laticinios", imagem: "🥛", unidade: "1L" },
+            { id: 13, nome: "Queijo Mussarela", preco: 24.99, categoria: "laticinios", imagem: "🧀", unidade: "kg" },
+            { id: 14, nome: "Iogurte Natural", preco: 3.99, categoria: "laticinios", imagem: "🥛", unidade: "un" },
+            
+            // Bebidas
+            { id: 15, nome: "Refrigerante Cola", preco: 5.99, categoria: "bebidas", imagem: "🥤", unidade: "2L" },
+            { id: 16, nome: "Suco de Laranja", preco: 7.99, categoria: "bebidas", imagem: "🧃", unidade: "1L" },
+            { id: 17, nome: "Água Mineral", preco: 2.99, categoria: "bebidas", imagem: "💧", unidade: "1.5L" },
+            
+            // Limpeza
+            { id: 18, nome: "Detergente", preco: 2.49, categoria: "limpeza", imagem: "🧽", unidade: "500ml" },
+            { id: 19, nome: "Sabão em Pó", preco: 12.99, categoria: "limpeza", imagem: "📦", unidade: "1kg" },
+            { id: 20, nome: "Desinfetante", preco: 4.99, categoria: "limpeza", imagem: "🧴", unidade: "1L" }
+        ];
+
+        let carrinho = [];
+        let categoriaAtual = 'todos';
+
+        // Carregar produtos na página
+        function carregarProdutos(produtosFiltrados = produtos) {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+
+            produtosFiltrados.forEach(produto => {
+                const produtoHTML = `
+                    <div class="col-md-4 col-lg-3 mb-4 product-item" data-category="${produto.categoria}">
+                        <div class="card product-card h-100">
+                            <div class="card-body text-center">
+                                <div style="font-size: 3rem; margin-bottom: 15px;">${produto.imagem}</div>
+                                <h6 class="card-title">${produto.nome}</h6>
+                                <p class="text-muted small">${produto.unidade}</p>
+                                <h5 class="text-success fw-bold">R$ ${produto.preco.toFixed(2)}</h5>
+                                <button class="btn btn-primary w-100" onclick="adicionarAoCarrinho(${produto.id})">
+                                    <i class="fas fa-cart-plus me-1"></i>
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += produtoHTML;
+            });
+        }
+
+        // Adicionar produto ao carrinho
+        function adicionarAoCarrinho(produtoId) {
+            const produto = produtos.find(p => p.id === produtoId);
+            const itemExistente = carrinho.find(item => item.id === produtoId);
+
+            if (itemExistente) {
+                itemExistente.quantidade++;
+            } else {
+                carrinho.push({
+                    ...produto,
+                    quantidade: 1
+                });
+            }
+
+            atualizarCarrinho();
+            
+            // Feedback visual
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check me-1"></i> Adicionado!';
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-success');
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-primary');
+            }, 1000);
+        }
+
+        // Atualizar carrinho
+        function atualizarCarrinho() {
+            const cartItems = document.getElementById('cartItems');
+            const cartBadge = document.getElementById('cartBadge');
+            const cartTotal = document.getElementById('cartTotal');
+
+            // Atualizar badge
+            const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+            cartBadge.textContent = totalItens;
+
+            // Atualizar total
+            const total = carrinho.reduce((total, item) => total + (item.preco * item.quantidade), 0);
+            cartTotal.textContent = total.toFixed(2);
+
+            // Atualizar itens
+            if (carrinho.length === 0) {
+                cartItems.innerHTML = '<p class="text-muted text-center">Carrinho vazio</p>';
+            } else {
+                cartItems.innerHTML = carrinho.map(item => `
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
+                        <div>
+                            <h6 class="mb-0">${item.nome}</h6>
+                            <small class="text-muted">R$ ${item.preco.toFixed(2)} / ${item.unidade}</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="alterarQuantidade(${item.id}, -1)">-</button>
+                            <span class="mx-2">${item.quantidade}</span>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="alterarQuantidade(${item.id}, 1)">+</button>
+                            <button class="btn btn-sm btn-outline-danger ms-2" onclick="removerItem(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Alterar quantidade
+        function alterarQuantidade(produtoId, delta) {
+            const item = carrinho.find(item => item.id === produtoId);
+            if (item) {
+                item.quantidade += delta;
+                if (item.quantidade <= 0) {
+                    removerItem(produtoId);
+                } else {
+                    atualizarCarrinho();
+                }
+            }
+        }
+
+        // Remover item
+        function removerItem(produtoId) {
+            carrinho = carrinho.filter(item => item.id !== produtoId);
+            atualizarCarrinho();
+        }
+
+        // Toggle carrinho
+        function toggleCart() {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Limpar carrinho
+        function clearCart() {
+            carrinho = [];
+            atualizarCarrinho();
+        }
+
+        // Filtrar por categoria
+        function filterCategory(categoria) {
+            categoriaAtual = categoria;
+            
+            // Atualizar botões ativos
+            document.querySelectorAll('.category-filter button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filtrar produtos
+            if (categoria === 'todos') {
+                carregarProdutos(produtos);
+            } else {
+                const produtosFiltrados = produtos.filter(p => p.categoria === categoria);
+                carregarProdutos(produtosFiltrados);
+            }
+        }
+
+        // Buscar produtos
+        function searchProducts() {
+            const termo = document.getElementById('searchInput').value.toLowerCase();
+            let produtosFiltrados = produtos;
+
+            if (categoriaAtual !== 'todos') {
+                produtosFiltrados = produtos.filter(p => p.categoria === categoriaAtual);
+            }
+
+            if (termo) {
+                produtosFiltrados = produtosFiltrados.filter(p => 
+                    p.nome.toLowerCase().includes(termo)
+                );
+            }
+
+            carregarProdutos(produtosFiltrados);
+        }
+
+        // Finalizar pedido
+        function finalizarPedido() {
+            if (carrinho.length === 0) {
+                alert('Adicione produtos ao carrinho primeiro!');
+                return;
+            }
+
+            const total = carrinho.reduce((total, item) => total + (item.preco * item.quantidade), 0);
+            let mensagem = '🛒 *PEDIDO IRANCHO DELIVERY*\n\n';
+            
+            carrinho.forEach(item => {
+                mensagem += `• ${item.quantidade}x ${item.nome} - R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
+            });
+            
+            mensagem += `\n💰 *Total: R$ ${total.toFixed(2)}*\n\n`;
+            mensagem += '📍 Endereço de entrega: _Aguardando..._\n';
+            mensagem += '💳 Forma de pagamento: _A definir_\n\n';
+            mensagem += 'Obrigado por escolher o IRANCHO! 🚀';
+
+            const whatsappUrl = `https://wa.me/5511999999999?text=${encodeURIComponent(mensagem)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarProdutos();
+            atualizarCarrinho();
+        });
+    </script>
 </body>
 </html>
