@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🛒 IRANCHO - Marketplace de Delivery</title>
+    <title>📱 ZAP MERCADO - Marketplace de Delivery</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -58,13 +58,6 @@
         .drogaria { color: var(--info-color); }
         .frutaria { color: var(--secondary-color); }
         
-        .auth-buttons {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        
         .modal-content {
             border-radius: 20px;
             border: none;
@@ -107,16 +100,80 @@
             font-weight: bold;
             color: var(--secondary-color);
         }
+        
+        /* SEÇÃO DE CADASTRO DESTACADA */
+        .cta-section {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 60px 40px;
+            margin: 60px 0;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn-cta {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .floating-login {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 10px 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-cta {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .floating-login {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 20px;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Auth Buttons -->
-    <div class="auth-buttons">
-        <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+    <!-- Login Flutuante -->
+    <div class="floating-login">
+        <button class="btn btn-outline-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
             <i class="fas fa-sign-in-alt me-1"></i> Entrar
-        </button>
-        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#registerModal">
-            <i class="fas fa-user-plus me-1"></i> Cadastrar
         </button>
     </div>
 
@@ -124,7 +181,7 @@
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand fw-bold fs-3" href="#">
-                🛒 <span style="color: var(--primary-color);">IRANCHO</span>
+                📱 <span style="color: var(--primary-color);">ZAP MERCADO</span>
             </a>
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="#como-funciona">Como Funciona</a>
@@ -313,6 +370,153 @@
         </div>
     </section>
 
+    <!-- Vantagens -->
+    <section id="vantagens" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="stats-section">
+                        <h2 class="text-center mb-5">⭐ Vantagens</h2>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-rocket fa-3x text-warning"></i>
+                                    </div>
+                                    <h5>🚀 Rápido e Fácil</h5>
+                                    <p>Cadastro em minutos, vendas no mesmo dia</p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-mobile-alt fa-3x text-warning"></i>
+                                    </div>
+                                    <h5>📱 100% Mobile</h5>
+                                    <p>Funciona perfeitamente em qualquer dispositivo</p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="text-center">
+                                    <div class="mb-3">
+                                        <i class="fab fa-whatsapp fa-3x text-warning"></i>
+                                    </div>
+                                    <h5>💬 WhatsApp Integrado</h5>
+                                    <p>Pedidos direto no seu WhatsApp</p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-chart-line fa-3x text-warning"></i>
+                                    </div>
+                                    <h5>📊 Aumente suas Vendas</h5>
+                                    <p>Alcance mais clientes online</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE CADASTRO DESTACADA -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="cta-section">
+                        <h2 class="display-4 fw-bold text-primary mb-4">
+                            🚀 Pronto para Começar?
+                        </h2>
+                        <p class="lead text-muted mb-4">
+                            Junte-se a centenas de lojistas que já estão vendendo online!
+                        </p>
+                        
+                        <div class="cta-buttons">
+                            <button class="btn btn-success btn-cta" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                <i class="fas fa-store me-2"></i>
+                                Cadastrar Minha Loja
+                            </button>
+                            
+                            <button class="btn btn-primary btn-cta" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                <i class="fas fa-user-plus me-2"></i>
+                                Criar Conta Cliente
+                            </button>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <small class="text-muted">
+                                ✅ Grátis para sempre &nbsp;&nbsp;
+                                ✅ Sem mensalidades &nbsp;&nbsp;
+                                ✅ Suporte completo
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato -->
+    <section id="contato" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="stats-section">
+                        <h2 class="text-center mb-5">📞 Contato</h2>
+                        
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-4">
+                                <div class="mb-3">
+                                    <i class="fab fa-whatsapp fa-3x text-warning"></i>
+                                </div>
+                                <h5>WhatsApp</h5>
+                                <p>(11) 99999-9999</p>
+                            </div>
+                            
+                            <div class="col-md-4 text-center mb-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-envelope fa-3x text-warning"></i>
+                                </div>
+                                <h5>Email</h5>
+                                <p>contato@zapmercado.com</p>
+                            </div>
+                            
+                            <div class="col-md-4 text-center mb-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-clock fa-3x text-warning"></i>
+                                </div>
+                                <h5>Atendimento</h5>
+                                <p>24h por dia, 7 dias por semana</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>📱 ZAP MERCADO</h5>
+                    <p>Conectando lojas e clientes através da tecnologia.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2024 ZAP MERCADO. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <!-- Modal Login -->
     <div class="modal fade" id="loginModal" tabindex="-1">
         <div class="modal-dialog">
@@ -489,133 +693,4 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">📝 Descrição da Loja</label>
-                                    <textarea class="form-control" rows="2" placeholder="Conte sobre sua loja..."></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-warning btn-custom w-100">
-                                    Criar Conta de Lojista
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Dados simulados (em produção, usar banco de dados)
-        let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-        let lojas = JSON.parse(localStorage.getItem('lojas')) || [];
-        let usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado')) || null;
-
-        // Abrir loja específica
-        function abrirLoja(tipo) {
-            if (!usuarioLogado) {
-                alert('Faça login para continuar!');
-                return;
-            }
-
-            if (usuarioLogado.tipo === 'lojista') {
-                window.location.href = 'painel-lojista.html';
-            } else {
-                window.location.href = `loja.html?tipo=${tipo}`;
-            }
-        }
-
-        // Login
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const senha = document.getElementById('loginPassword').value;
-            const tipo = document.querySelector('input[name="userType"]:checked').value;
-            
-            const usuario = usuarios.find(u => u.email === email && u.senha === senha && u.tipo === tipo);
-            
-            if (usuario) {
-                usuarioLogado = usuario;
-                localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-                
-                if (tipo === 'lojista') {
-                    window.location.href = 'painel-lojista.html';
-                } else {
-                    window.location.href = 'cliente.html';
-                }
-            } else {
-                alert('Email ou senha incorretos!');
-            }
-        });
-
-        // Cadastro Cliente
-        document.getElementById('clienteForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const cliente = {
-                id: Date.now(),
-                tipo: 'cliente',
-                nome: this.querySelector('input[type="text"]').value,
-                email: this.querySelector('input[type="email"]').value,
-                whatsapp: this.querySelector('input[type="tel"]').value,
-                senha: this.querySelector('input[type="password"]').value,
-                endereco: this.querySelector('textarea').value,
-                dataCadastro: new Date().toISOString()
-            };
-            
-            usuarios.push(cliente);
-            localStorage.setItem('usuarios', JSON.stringify(usuarios));
-            
-            alert('Conta criada com sucesso!');
-            bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
-        });
-
-        // Cadastro Lojista
-        document.getElementById('lojistaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const inputs = this.querySelectorAll('input, select, textarea');
-            const lojista = {
-                id: Date.now(),
-                tipo: 'lojista',
-                nomeLoja: inputs[0].value,
-                tipoLoja: inputs[1].value,
-                responsavel: inputs[2].value,
-                email: inputs[3].value,
-                whatsapp: inputs[4].value,
-                senha: inputs[5].value,
-                cnpj: inputs[6].value,
-                taxaEntrega: parseFloat(inputs[7].value) || 0,
-                endereco: inputs[8].value,
-                descricao: inputs[9].value,
-                produtos: [],
-                ativo: true,
-                dataCadastro: new Date().toISOString()
-            };
-            
-            usuarios.push(lojista);
-            lojas.push(lojista);
-            localStorage.setItem('usuarios', JSON.stringify(usuarios));
-            localStorage.setItem('lojas', JSON.stringify(lojas));
-            
-            alert('Loja cadastrada com sucesso! Faça login para acessar seu painel.');
-            bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
-        });
-
-        // Verificar se usuário já está logado
-        if (usuarioLogado) {
-            document.querySelector('.auth-buttons').innerHTML = `
-                <span class="text-white me-3">Olá, ${usuarioLogado.nome || usuarioLogado.nomeLoja}!</span>
-                <button class="btn btn-outline-light" onclick="logout()">
-                    <i class="fas fa-sign-out-alt me-1"></i> Sair
-                </button>
-            `;
-        }
-
-        function logout() {
-            localStorage.removeItem('usuarioLogado');
-            location.reload();
-        }
-    </script>
-</body>
-</html>
+                                    <textarea class="form-control"
