@@ -159,78 +159,20 @@
         }
     </style>
 </head>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-// Função para abrir modal de login
-function abrirLogin() {
-    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-    loginModal.show();
-}
-
-// Função para abrir modal de cadastro geral
-function abrirCadastro() {
-    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
-    registerModal.show();
-}
-
-// Função para abrir cadastro específico de cliente
-function abrirCadastroCliente() {
-    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
-    registerModal.show();
-    setTimeout(() => {
-        document.getElementById('clienteTabLink').click();
-    }, 100);
-}
-
-// Função para abrir cadastro específico de lojista
-function abrirCadastroLojista(tipo = '') {
-    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
-    registerModal.show();
-    setTimeout(() => {
-        document.getElementById('lojistaTabLink').click();
-        if (tipo) {
-            document.getElementById('tipoLoja').value = tipo;
-        }
-    }, 100);
-}
-
-// Event listeners para os formulários
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Login realizado com sucesso!');
-});
-
-document.getElementById('clienteForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Cadastro de cliente realizado com sucesso!');
-});
-
-document.getElementById('lojistaForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Cadastro de lojista realizado com sucesso!');
-});
-</script>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-            <div class="d-flex flex-column align-items-start">
-                <a class="navbar-brand fw-bold fs-3 mb-2" href="#">
-                    📱 <span style="color: var(--primary-color);">ZAP MERCADO</span>
-                </a>
-                <div class="navbar-buttons">
-                    <button class="btn btn-outline-primary btn-sm" onclick="abrirLogin()">
-                        <i class="fas fa-sign-in-alt me-1"></i> Entrar
-                    </button>
-                    <button class="btn btn-success btn-sm" onclick="abrirCadastro()">
-                        <i class="fas fa-user-plus me-1"></i> Cadastrar
-                    </button>
-                </div>
-            </div>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="#como-funciona">Como Funciona</a>
-                <a class="nav-link" href="#vantagens">Vantagens</a>
-                <a class="nav-link" href="#contato">Contato</a>
+            <a class="navbar-brand fw-bold fs-3" href="#">
+                📱 ZAP MERCADO
+            </a>
+            <div class="navbar-buttons">
+                <button class="btn btn-outline-primary btn-custom" onclick="abrirLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+                <button class="btn btn-primary btn-custom" onclick="abrirCadastro()">
+                    <i class="fas fa-user-plus"></i> Cadastrar
+                </button>
             </div>
         </div>
     </nav>
@@ -238,373 +180,159 @@ document.getElementById('lojistaForm').addEventListener('submit', function(e) {
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="container">
-            <h1 class="display-3 fw-bold mb-4">
-                🚀 Seu Marketplace de Delivery
-            </h1>
-            <p class="lead fs-4 mb-5">
-                Conectamos lojas e clientes em uma única plataforma
-            </p>
+            <h1 class="display-4 fw-bold mb-4">🚀 O Futuro do Delivery</h1>
+            <p class="lead mb-5">Conectamos você aos melhores estabelecimentos da sua região via WhatsApp!</p>
             
             <!-- Estatísticas -->
             <div class="stats-section">
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="stat-item">
-                            <div class="stat-number">500+</div>
-                            <div>Lojas Cadastradas</div>
-                        </div>
+                    <div class="col-md-3 stat-item">
+                        <div class="stat-number">500+</div>
+                        <div>Lojas Parceiras</div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="stat-item">
-                            <div class="stat-number">10K+</div>
-                            <div>Produtos Disponíveis</div>
-                        </div>
+                    <div class="col-md-3 stat-item">
+                        <div class="stat-number">10K+</div>
+                        <div>Clientes Ativos</div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="stat-item">
-                            <div class="stat-number">50K+</div>
-                            <div>Clientes Ativos</div>
-                        </div>
+                    <div class="col-md-3 stat-item">
+                        <div class="stat-number">50K+</div>
+                        <div>Pedidos Realizados</div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="stat-item">
-                            <div class="stat-number">1M+</div>
-                            <div>Pedidos Entregues</div>
-                        </div>
+                    <div class="col-md-3 stat-item">
+                        <div class="stat-number">4.9⭐</div>
+                        <div>Avaliação Média</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Tipos de Loja -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <h2 class="text-center text-white mb-5 fs-1">
-                        🏪 Escolha o Tipo de Negócio
-                    </h2>
-                    
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="store-type-card" onclick="abrirCadastroLojista('mercado')">
-                                <div class="store-icon mercado">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </div>
-                                <h3 class="fw-bold mb-3">🛒 Mercados</h3>
-                                <p class="text-muted">
-                                    Supermercados, mercearias, atacados e distribuidoras
-                                </p>
-                                <div class="mt-4">
-                                    <span class="badge bg-success me-2">Alimentos</span>
-                                    <span class="badge bg-success me-2">Bebidas</span>
-                                    <span class="badge bg-success">Limpeza</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-4">
-                            <div class="store-type-card" onclick="abrirCadastroLojista('drogaria')">
-                                <div class="store-icon drogaria">
-                                    <i class="fas fa-pills"></i>
-                                </div>
-                                <h3 class="fw-bold mb-3">💊 Drogarias</h3>
-                                <p class="text-muted">
-                                    Farmácias, drogarias e produtos de saúde
-                                </p>
-                                <div class="mt-4">
-                                    <span class="badge bg-info me-2">Medicamentos</span>
-                                    <span class="badge bg-info me-2">Cosméticos</span>
-                                    <span class="badge bg-info">Higiene</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-4">
-                            <div class="store-type-card" onclick="abrirCadastroLojista('frutaria')">
-                                <div class="store-icon frutaria">
-                                    <i class="fas fa-apple-alt"></i>
-                                </div>
-                                <h3 class="fw-bold mb-3">🍎 Frutarias</h3>
-                                <p class="text-muted">
-                                    Hortifrútis, frutarias e produtos naturais
-                                </p>
-                                <div class="mt-4">
-                                    <span class="badge bg-warning me-2">Frutas</span>
-                                    <span class="badge bg-warning me-2">Verduras</span>
-                                    <span class="badge bg-warning">Orgânicos</span>
-                                </div>
-                            </div>
-                        </div>
+    <!-- Tipos de Estabelecimentos -->
+    <section class="container my-5">
+        <h2 class="text-center text-white mb-5">🏪 Tipos de Estabelecimentos</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="store-type-card" onclick="abrirCadastroLojista('mercado')">
+                    <div class="store-icon mercado">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h4>🛒 Mercados</h4>
+                    <p class="text-muted">Supermercados, mercearias e conveniências</p>
+                    <div class="mt-3">
+                        <span class="badge bg-success me-2">Alimentos</span>
+                        <span class="badge bg-info me-2">Bebidas</span>
+                        <span class="badge bg-warning">Limpeza</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="store-type-card" onclick="abrirCadastroLojista('drogaria')">
+                    <div class="store-icon drogaria">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h4>💊 Drogarias</h4>
+                    <p class="text-muted">Farmácias e produtos de saúde</p>
+                    <div class="mt-3">
+                        <span class="badge bg-danger me-2">Medicamentos</span>
+                        <span class="badge bg-primary me-2">Cosméticos</span>
+                        <span class="badge bg-secondary">Higiene</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="store-type-card" onclick="abrirCadastroLojista('frutaria')">
+                    <div class="store-icon frutaria">
+                        <i class="fas fa-apple-alt"></i>
+                    </div>
+                    <h4>🍎 Frutarias</h4>
+                    <p class="text-muted">Frutas, verduras e produtos naturais</p>
+                    <div class="mt-3">
+                        <span class="badge bg-success me-2">Frutas</span>
+                        <span class="badge bg-warning me-2">Verduras</span>
+                        <span class="badge bg-info">Orgânicos</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Como Funciona -->
-    <section id="como-funciona" class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="stats-section">
-                        <h2 class="text-center mb-5">🚀 Como Funciona</h2>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="d-flex">
-                                    <div class="me-3">
-                                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                            <strong>1</strong>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h5>🏪 Para Lojistas</h5>
-                                        <p>Cadastre sua loja, adicione produtos e comece a vender online</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-4">
-                                <div class="d-flex">
-                                    <div class="me-3">
-                                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                            <strong>2</strong>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h5>👤 Para Clientes</h5>
-                                        <p>Escolha a loja, navegue pelos produtos e faça seu pedido</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-4">
-                                <div class="d-flex">
-                                    <div class="me-3">
-                                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                            <strong>3</strong>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h5>📱 Integração WhatsApp</h5>
-                                        <p>Pedidos enviados direto para o WhatsApp da loja</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-4">
-                                <div class="d-flex">
-                                    <div class="me-3">
-                                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                            <strong>4</strong>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h5>🚚 Entrega Rápida</h5>
-                                        <p>Entrega coordenada entre loja e cliente</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- Call to Action -->
+    <section class="container">
+        <div class="cta-section">
+            <h2 class="display-5 fw-bold mb-4">🎯 Comece Agora!</h2>
+            <p class="lead text-muted">Escolha como você quer participar da revolução do delivery</p>
+            
+            <div class="cta-buttons">
+                <button class="btn btn-success btn-cta" onclick="abrirCadastroCliente()">
+                    <i class="fas fa-user"></i> Sou Cliente
+                </button>
+                <button class="btn btn-primary btn-cta" onclick="abrirCadastroLojista()">
+                    <i class="fas fa-store"></i> Tenho uma Loja
+                </button>
             </div>
         </div>
     </section>
 
-    <!-- Vantagens -->
-    <section id="vantagens" class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="stats-section">
-                        <h2 class="text-center mb-5">⭐ Vantagens</h2>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="text-center">
-                                    <div class="mb-3">
-                                        <i class="fas fa-rocket fa-3x text-warning"></i>
-                                    </div>
-                                    <h5>🚀 Rápido e Fácil</h5>
-                                    <p>Cadastro em minutos, vendas no mesmo dia</p>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-4">
-                                <div class="text-center">
-                                    <div class="mb-3">
-                                        <i class="fas fa-mobile-alt fa-3x text-warning"></i>
-                                    </div>
-                                    <h5>📱 100% Mobile</h5>
-                                    <p>Funciona perfeitamente em qualquer dispositivo</p>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-4">
-                                <div class="text-center">
-                                    <div class="mb-3">
-                                        <i class="fab fa-whatsapp fa-3x text-warning"></i>
-                                    </div>
-                                    <h5>💬 WhatsApp Integrado</h5>
-                                    <p>Pedidos direto no seu WhatsApp</p>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-4">
-                                <div class="text-center">
-                                    <div class="mb-3">
-                                        <i class="fas fa-chart-line fa-3x text-warning"></i>
-                                    </div>
-                                    <h5>📊 Aumente suas Vendas</h5>
-                                    <p>Alcance mais clientes online</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SEÇÃO DE CADASTRO DESTACADA -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="cta-section">
-                        <h2 class="display-4 fw-bold text-primary mb-4">
-                            🚀 Pronto para Começar?
-                        </h2>
-                        <p class="lead text-muted mb-4">
-                            Junte-se a centenas de lojistas que já estão vendendo online!
-                        </p>
-                        
-                        <div class="cta-buttons">
-                            <button class="btn btn-success btn-cta" onclick="abrirCadastroLojista()">
-                                <i class="fas fa-store me-2"></i>
-                                Cadastrar Minha Loja
-                            </button>
-                            
-                            <button class="btn btn-primary btn-cta" onclick="abrirCadastroCliente()">
-                                <i class="fas fa-user-plus me-2"></i>
-                                Criar Conta Cliente
-                            </button>
-                        </div>
-                        
-                        <div class="mt-4">
-                            <small class="text-muted">
-                                ✅ Grátis para sempre &nbsp;&nbsp;
-                                ✅ Sem mensalidades &nbsp;&nbsp;
-                                ✅ Suporte completo
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contato -->
-    <section id="contato" class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="stats-section">
-                        <h2 class="text-center mb-5">📞 Contato</h2>
-                        
-                        <div class="row">
-                            <div class="col-md-4 text-center mb-4">
-                                <div class="mb-3">
-                                    <i class="fab fa-whatsapp fa-3x text-warning"></i>
-                                </div>
-                                <h5>WhatsApp</h5>
-                                <p>(11) 99999-9999</p>
-                            </div>
-                            
-                            <div class="col-md-4 text-center mb-4">
-                                <div class="mb-3">
-                                    <i class="fas fa-envelope fa-3x text-warning"></i>
-                                </div>
-                                <h5>Email</h5>
-                                <p>contato@zapmercado.com</p>
-                            </div>
-                            
-                            <div class="col-md-4 text-center mb-4">
-                                <div class="mb-3">
-                                    <i class="fas fa-clock fa-3x text-warning"></i>
-                                </div>
-                                <h5>Atendimento</h5>
-                                <p>24h por dia, 7 dias por semana</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>📱 ZAP MERCADO</h5>
-                    <p>Conectando lojas e clientes através da tecnologia.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2024 ZAP MERCADO. Todos os direitos reservados.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Modal Login -->
+    <!-- Modal de Login -->
     <div class="modal fade" id="loginModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title">🔐 Entrar na Conta</h5>
+                    <h5 class="modal-title">🔐 Fazer Login</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
                     <form id="loginForm">
-                        <div class="mb-3">
-                            <label class="form-label">📧 Email</label>
-                            <input type="email" class="form-control" id="loginEmail" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">🔒 Senha</label>
-                            <input type="password" class="form-control" id="loginPassword" required>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="userType" value="cliente" id="loginCliente" checked>
-                                <label class="form-check-label" for="loginCliente">
-                                    👤 Sou Cliente
-                                </label>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Tipo de Usuário:</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="userType" id="clienteLogin" value="cliente" checked>
+                                        <label class="form-check-label" for="clienteLogin">
+                                            👤 Cliente
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="userType" id="lojistaLogin" value="lojista">
+                                        <label class="form-check-label" for="lojistaLogin">
+                                            🏪 Lojista
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="userType" value="lojista" id="loginLojista">
-                                <label class="form-check-label" for="loginLojista">
-                                    🏪 Sou Lojista
-                                </label>
-                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-custom w-100">
-                            Entrar
+                        
+                        <div class="mb-3">
+                            <label class="form-label">📧 Email ou WhatsApp:</label>
+                            <input type="text" class="form-control" placeholder="seu@email.com ou (11) 99999-9999" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">🔒 Senha:</label>
+                            <input type="password" class="form-control" placeholder="Sua senha" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 btn-custom">
+                            <i class="fas fa-sign-in-alt"></i> Entrar
                         </button>
+                        
+                        <div class="text-center mt-3">
+                            <a href="#" class="text-decoration-none">Esqueci minha senha</a>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Cadastro -->
+    <!-- Modal de Cadastro -->
     <div class="modal fade" id="registerModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-0">
                     <h5 class="modal-title">📝 Criar Conta</h5>
@@ -612,131 +340,255 @@ document.getElementById('lojistaForm').addEventListener('submit', function(e) {
                 </div>
                 <div class="modal-body p-4">
                     <!-- Tabs -->
-                    <ul class="nav nav-tabs mb-4" id="registerTabs">
+                    <ul class="nav nav-pills nav-justified mb-4" id="registerTabs">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#clienteTab" id="clienteTabLink">
-                                👤 Sou Cliente
+                            <a class="nav-link active" id="clienteTabLink" data-bs-toggle="pill" href="#clienteTab">
+                                👤 Cliente
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#lojistaTab" id="lojistaTabLink">
-                                🏪 Sou Lojista
+                            <a class="nav-link" id="lojistaTabLink" data-bs-toggle="pill" href="#lojistaTab">
+                                🏪 Lojista
                             </a>
                         </li>
                     </ul>
 
                     <div class="tab-content">
-                        <!-- Cadastro Cliente -->
+                        <!-- Tab Cliente -->
                         <div class="tab-pane fade show active" id="clienteTab">
                             <form id="clienteForm">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">👤 Nome Completo</label>
-                                            <input type="text" class="form-control" required>
+                                            <label class="form-label">👤 Nome Completo:</label>
+                                            <input type="text" class="form-control" placeholder="Seu nome completo" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">📧 Email</label>
-                                            <input type="email" class="form-control" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">📱 WhatsApp</label>
+                                            <label class="form-label">📱 WhatsApp:</label>
                                             <input type="tel" class="form-control" placeholder="(11) 99999-9999" required>
                                         </div>
                                     </div>
+                                </div>
+                                
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">🔒 Senha</label>
-                                            <input type="password" class="form-control" required>
+                                            <label class="form-label">📧 Email:</label>
+                                            <input type="email" class="form-control" placeholder="seu@email.com" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">🎂 Data de Nascimento:</label>
+                                            <input type="date" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="mb-3">
-                                    <label class="form-label">📍 Endereço Completo</label>
-                                    <textarea class="form-control" rows="2" placeholder="Rua, número, bairro, cidade" required></textarea>
+                                    <label class="form-label">📍 Endereço Completo:</label>
+                                    <input type="text" class="form-control" placeholder="Rua, número, bairro, cidade" required>
                                 </div>
-                                <button type="submit" class="btn btn-success btn-custom w-100">
-                                    Criar Conta de Cliente
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">🔒 Senha:</label>
+                                            <input type="password" class="form-control" placeholder="Mínimo 6 caracteres" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">🔒 Confirmar Senha:</label>
+                                            <input type="password" class="form-control" placeholder="Repita a senha" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="termosCliente" required>
+                                    <label class="form-check-label" for="termosCliente">
+                                        Aceito os <a href="#">termos de uso</a> e <a href="#">política de privacidade</a>
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-success w-100 btn-custom">
+                                    <i class="fas fa-user-plus"></i> Criar Conta de Cliente
                                 </button>
                             </form>
                         </div>
 
-                        <!-- Cadastro Lojista -->
+                        <!-- Tab Lojista -->
                         <div class="tab-pane fade" id="lojistaTab">
                             <form id="lojistaForm">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <div class="mb-3">
-                                            <label class="form-label">🏪 Nome da Loja</label>
-                                            <input type="text" class="form-control" required>
+                                            <label class="form-label">🏪 Nome da Loja:</label>
+                                            <input type="text" class="form-control" placeholder="Nome do seu estabelecimento" required>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label">🏷️ Tipo de Loja</label>
+                                            <label class="form-label">🏷️ Tipo:</label>
                                             <select class="form-control" id="tipoLoja" required>
                                                 <option value="">Selecione...</option>
-                                                <option value="mercado">🛒 Mercado/Supermercado</option>
-                                                <option value="drogaria">💊 Drogaria/Farmácia</option>
-                                                <option value="frutaria">🍎 Frutaria/Hortifrúti</option>
+                                                <option value="mercado">🛒 Mercado</option>
+                                                <option value="drogaria">💊 Drogaria</option>
+                                                <option value="frutaria">🍎 Frutaria</option>
+                                                <option value="outro">🏪 Outro</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">👤 Nome do Responsável</label>
-                                            <input type="text" class="form-control" required>
+                                            <label class="form-label">👤 Nome do Responsável:</label>
+                                            <input type="text" class="form-control" placeholder="Seu nome completo" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">📧 Email</label>
-                                            <input type="email" class="form-control" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">📱 WhatsApp da Loja</label>
+                                            <label class="form-label">📱 WhatsApp da Loja:</label>
                                             <input type="tel" class="form-control" placeholder="(11) 99999-9999" required>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">🔒 Senha</label>
-                                            <input type="password" class="form-control" required>
-                                        </div>
-                                    </div>
                                 </div>
+                                
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">📄 CNPJ (Opcional)</label>
-                                            <input type="text" class="form-control" placeholder="00.000.000/0000-00">
+                                            <label class="form-label">📧 Email:</label>
+                                            <input type="email" class="form-control" placeholder="loja@email.com" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">🚚 Taxa de Entrega (R$)</label>
-                                            <input type="number" class="form-control" step="0.01" placeholder="5.00">
+                                            <label class="form-label">📄 CNPJ:</label>
+                                            <input type="text" class="form-control" placeholder="00.000.000/0001-00">
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="mb-3">
-                                    <label class="form-label">📍 Endereço da Loja</label>
-                                    <textarea class="form-control" rows="2" placeholder="Rua, número, bairro, cidade" required></textarea>
+                                    <label class="form-label">📍 Endereço da Loja:</label>
+                                    <input type="text" class="form-control" placeholder="Rua, número, bairro, cidade" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">📝 Descrição da Loja</label>
-                                    <textarea class="form-control" rows="2" placeholder="Conte sobre sua loja..."></textarea>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">🕐 Horário de Funcionamento:</label>
+                                            <input type="text" class="form-control" placeholder="Ex: 08:00 às 22:00" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">🚚 Taxa de Entrega (R$):</label>
+                                            <input type="number" class="form-control" placeholder="5.00" step="0.01" required>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-success btn
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">🔒 Senha:</label>
+                                            <input type="password" class="form-control" placeholder="Mínimo 6 caracteres" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">🔒 Confirmar Senha:</label>
+                                            <input type="password" class="form-control" placeholder="Repita a senha" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="termosLojista" required>
+                                    <label class="form-check-label" for="termosLojista">
+                                        Aceito os <a href="#">termos de uso</a> e <a href="#">política de privacidade</a>
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary w-100 btn-custom">
+                                    <i class="fas fa-store"></i> Criar Conta de Lojista
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Função para abrir modal de login
+        function abrirLogin() {
+            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+        }
+
+        // Função para abrir modal de cadastro geral
+        function abrirCadastro() {
+            const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+            registerModal.show();
+        }
+
+        // Função para abrir cadastro específico de cliente
+        function abrirCadastroCliente() {
+            const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+            registerModal.show();
+            setTimeout(() => {
+                document.getElementById('clienteTabLink').click();
+            }, 100);
+        }
+
+        // Função para abrir cadastro específico de lojista
+        function abrirCadastroLojista(tipo = '') {
+            const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+            registerModal.show();
+            setTimeout(() => {
+                document.getElementById('lojistaTabLink').click();
+                if (tipo) {
+                    document.getElementById('tipoLoja').value = tipo;
+                }
+            }, 100);
+        }
+
+        // ✅ FUNÇÕES DE REDIRECIONAMENTO ATUALIZADAS:
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userType = document.querySelector('input[name="userType"]:checked').value;
+            
+            if (userType === 'cliente') {
+                window.location.href = 'cliente.html';
+            } else {
+                window.location.href = 'lojista.html';
+            }
+        });
+
+        document.getElementById('clienteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('✅ Cadastro realizado! Redirecionando...');
+            setTimeout(() => {
+                window.location.href = 'cliente.html';
+            }, 1000);
+        });
+
+        document.getElementById('lojistaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('✅ Cadastro realizado! Redirecionando...');
+            setTimeout(() => {
+                window.location.href = 'lojista.html';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
