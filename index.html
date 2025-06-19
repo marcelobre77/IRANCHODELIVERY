@@ -1,6 +1,3 @@
-## **HTML COMPLETO COM JAVASCRIPT INTEGRADO:**
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -162,6 +159,57 @@
         }
     </style>
 </head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Função para abrir modal de login
+function abrirLogin() {
+    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    loginModal.show();
+}
+
+// Função para abrir modal de cadastro geral
+function abrirCadastro() {
+    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+    registerModal.show();
+}
+
+// Função para abrir cadastro específico de cliente
+function abrirCadastroCliente() {
+    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+    registerModal.show();
+    setTimeout(() => {
+        document.getElementById('clienteTabLink').click();
+    }, 100);
+}
+
+// Função para abrir cadastro específico de lojista
+function abrirCadastroLojista(tipo = '') {
+    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+    registerModal.show();
+    setTimeout(() => {
+        document.getElementById('lojistaTabLink').click();
+        if (tipo) {
+            document.getElementById('tipoLoja').value = tipo;
+        }
+    }, 100);
+}
+
+// Event listeners para os formulários
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Login realizado com sucesso!');
+});
+
+document.getElementById('clienteForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Cadastro de cliente realizado com sucesso!');
+});
+
+document.getElementById('lojistaForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Cadastro de lojista realizado com sucesso!');
+});
+</script>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
