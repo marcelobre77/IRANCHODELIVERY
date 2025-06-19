@@ -168,10 +168,10 @@
                     📱 <span style="color: var(--primary-color);">ZAP MERCADO</span>
                 </a>
                 <div class="navbar-buttons">
-                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    <button class="btn btn-outline-primary btn-sm" onclick="abrirLogin()">
                         <i class="fas fa-sign-in-alt me-1"></i> Entrar
                     </button>
-                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">
+                    <button class="btn btn-success btn-sm" onclick="abrirCadastro()">
                         <i class="fas fa-user-plus me-1"></i> Cadastrar
                     </button>
                 </div>
@@ -237,7 +237,7 @@
                     
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="store-type-card" onclick="abrirLoja('mercado')">
+                            <div class="store-type-card" onclick="abrirCadastroLojista('mercado')">
                                 <div class="store-icon mercado">
                                     <i class="fas fa-shopping-cart"></i>
                                 </div>
@@ -254,7 +254,7 @@
                         </div>
                         
                         <div class="col-md-4">
-                            <div class="store-type-card" onclick="abrirLoja('drogaria')">
+                            <div class="store-type-card" onclick="abrirCadastroLojista('drogaria')">
                                 <div class="store-icon drogaria">
                                     <i class="fas fa-pills"></i>
                                 </div>
@@ -271,7 +271,7 @@
                         </div>
                         
                         <div class="col-md-4">
-                            <div class="store-type-card" onclick="abrirLoja('frutaria')">
+                            <div class="store-type-card" onclick="abrirCadastroLojista('frutaria')">
                                 <div class="store-icon frutaria">
                                     <i class="fas fa-apple-alt"></i>
                                 </div>
@@ -432,12 +432,12 @@
                         </p>
                         
                         <div class="cta-buttons">
-                            <button class="btn btn-success btn-cta" data-bs-toggle="modal" data-bs-target="#registerModal">
+                            <button class="btn btn-success btn-cta" onclick="abrirCadastroLojista()">
                                 <i class="fas fa-store me-2"></i>
                                 Cadastrar Minha Loja
                             </button>
                             
-                            <button class="btn btn-primary btn-cta" data-bs-toggle="modal" data-bs-target="#registerModal">
+                            <button class="btn btn-primary btn-cta" onclick="abrirCadastroCliente()">
                                 <i class="fas fa-user-plus me-2"></i>
                                 Criar Conta Cliente
                             </button>
@@ -563,12 +563,12 @@
                     <!-- Tabs -->
                     <ul class="nav nav-tabs mb-4" id="registerTabs">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#clienteTab">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#clienteTab" id="clienteTabLink">
                                 👤 Sou Cliente
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#lojistaTab">
+                            <a class="nav-link" data-bs-toggle="tab" href="#lojistaTab" id="lojistaTabLink">
                                 🏪 Sou Lojista
                             </a>
                         </li>
@@ -629,7 +629,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">🏷️ Tipo de Loja</label>
-                                            <select class="form-control" required>
+                                            <select class="form-control" id="tipoLoja" required>
                                                 <option value="">Selecione...</option>
                                                 <option value="mercado">🛒 Mercado/Supermercado</option>
                                                 <option value="drogaria">💊 Drogaria/Farmácia</option>
