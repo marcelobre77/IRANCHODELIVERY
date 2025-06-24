@@ -3,284 +3,653 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👤 Área do Cliente - ZAP MERCADO</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>ZapMercado - Cliente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #28a745;
-            --secondary-color: #ffc107;
+        .navbar-brand {
+            font-weight: bold;
+            color: #25D366 !important;
         }
         
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        .store-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        .loja-card {
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.2s;
+            border: 2px solid transparent;
         }
         
-        .store-card:hover {
+        .loja-card:hover {
             transform: translateY(-5px);
+            border-color: #25D366;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
         }
         
-        .product-card {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .loja-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
         }
         
-        .cart-item {
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .produto-card {
+            transition: transform 0.2s;
+        }
+        
+        .produto-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .produto-emoji {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .produto-preco {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #25D366;
+            margin: 0;
+        }
+        
+        .carrinho-item {
             border-bottom: 1px solid #eee;
-            padding: 10px 0;
+            padding: 15px 0;
         }
         
-        .cart-sidebar {
+        .carrinho-item:last-child {
+            border-bottom: none;
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            border-color: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #20B358;
+            border-color: #20B358;
+            color: white;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .categoria-badge {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .categoria-badge:hover {
+            background-color: #25D366;
+            color: white;
+            border-color: #25D366;
+        }
+        
+        .floating-cart {
             position: fixed;
-            right: 0;
-            top: 0;
-            height: 100vh;
-            width: 350px;
-            background: white;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
+            bottom: 20px;
+            right: 20px;
             z-index: 1000;
-            overflow-y: auto;
         }
         
-        .cart-sidebar.active {
-            transform: translateX(0);
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                👤 ZAP MERCADO - Cliente
+            <a class="navbar-brand" href="#">
+                <i class="fab fa-whatsapp"></i> ZapMercado
             </a>
-            <div class="navbar-nav ms-auto">
-                <span class="navbar-text me-3">Olá, Maria!</span>
-                <button class="btn btn-outline-light me-2" onclick="toggleCart()">
-                    🛒 Carrinho (<span id="cartCount">0</span>)
-                </button>
-                <a class="nav-link" href="index.html">Sair</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#lojas">🏪 Lojas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pedidos">📋 Meus Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#perfil">👤 Perfil</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <!-- Filtros -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="🔍 Buscar lojas ou produtos...">
-            </div>
-            <div class="col-md-3">
-                <select class="form-control">
-                    <option value="">Todas as categorias</option>
-                    <option value="mercado">🛒 Mercados</option>
-                    <option value="drogaria">💊 Drogarias</option>
-                    <option value="frutaria">🍎 Frutarias</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <select class="form-control">
-                    <option value="">Ordenar por</option>
-                    <option value="distancia">Mais próximas</option>
-                    <option value="avaliacao">Melhor avaliadas</option>
-                    <option value="entrega">Menor taxa de entrega</option>
-                </select>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3">🛒 Delivery Rápido e Fácil</h1>
+            <p class="lead mb-4">Peça pelo WhatsApp e receba em casa!</p>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" placeholder="Buscar produtos ou lojas..." id="buscarInput">
+                        <button class="btn btn-light" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- Lista de Lojas -->
-        <div class="row">
-            <div class="col-md-8">
-                <h4 class="text-white mb-4">🏪 Lojas Disponíveis</h4>
-                
-                <div class="store-card" onclick="abrirLoja('mercado-central')">
-                    <div class="row align-items-center">
-                        <div class="col-md-2">
-                            <div class="text-center">
-                                <i class="fas fa-shopping-cart fa-3x text-success"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h5>🛒 Mercado Central</h5>
-                            <p class="text-muted mb-1">Supermercado completo</p>
-                            <small>📍 2.3 km • ⭐ 4.8 • 🚚 R$ 5,00</small>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <span class="badge bg-success mb-2">Aberto</span><br>
-                            <small class="text-muted">Entrega: 30-45 min</small>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="store-card" onclick="abrirLoja('drogaria-saude')">
-                    <div class="row align-items-center">
-                        <div class="col-md-2">
-                            <div class="text-center">
-                                <i class="fas fa-pills fa-3x text-info"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h5>💊 Drogaria Saúde</h5>
-                            <p class="text-muted mb-1">Farmácia e cosméticos</p>
-                            <small>📍 1.8 km • ⭐ 4.9 • 🚚 R$ 3,00</small>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <span class="badge bg-success mb-2">Aberto</span><br>
-                            <small class="text-muted">Entrega: 20-30 min</small>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="store-card" onclick="abrirLoja('frutaria-natural')">
-                    <div class="row align-items-center">
-                        <div class="col-md-2">
-                            <div class="text-center">
-                                <i class="fas fa-apple-alt fa-3x text-warning"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h5>🍎 Frutaria Natural</h5>
-                            <p class="text-muted mb-1">Frutas e verduras frescas</p>
-                            <small>📍 3.1 km • ⭐ 4.7 • 🚚 R$ 4,00</small>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <span class="badge bg-success mb-2">Aberto</span><br>
-                            <small class="text-muted">Entrega: 25-40 min</small>
-                        </div>
-                    </div>
-                </div>
+    <!-- Categorias -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="text-center">
+                <span class="categoria-badge">🛒 Mercados</span>
+                <span class="categoria-badge">💊 Farmácias</span>
+                <span class="categoria-badge">🍎 Hortifruti</span>
+                <span class="categoria-badge">🍕 Restaurantes</span>
+                <span class="categoria-badge">🏪 Conveniência</span>
+                <span class="categoria-badge">🧴 Cosméticos</span>
             </div>
+        </div>
+    </section>
 
-            <!-- Sidebar de Informações -->
-            <div class="col-md-4">
-                <div class="store-card">
-                    <h5>📋 Meus Pedidos Recentes</h5>
-                    
-                    <div class="border-bottom pb-2 mb-2">
-                        <div class="d-flex justify-content-between">
-                            <strong>Pedido #123</strong>
-                            <span class="badge bg-success">Entregue</span>
-                        </div>
-                        <small>Mercado Central - R$ 67,80</small><br>
-                        <small class="text-muted">Ontem, 14:30</small>
-                    </div>
-                    
-                    <div class="border-bottom pb-2 mb-2">
-                        <div class="d-flex justify-content-between">
-                            <strong>Pedido #122</strong>
-                            <span class="badge bg-info">A caminho</span>
-                        </div>
-                        <small>Drogaria Saúde - R$ 23,50</small><br>
-                        <small class="text-muted">Hoje, 10:15</small>
-                    </div>
-                    
-                    <button class="btn btn-outline-primary btn-sm w-100 mt-2">
-                        Ver Todos os Pedidos
-                    </button>
+    <!-- Lojas -->
+    <section id="lojas" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">🏪 Lojas Disponíveis</h2>
+            <div class="row" id="lojasContainer">
+                <!-- Lojas serão carregadas aqui -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrinho Flutuante -->
+    <div class="floating-cart">
+        <button class="btn btn-success btn-lg rounded-circle" onclick="abrirCarrinho()" style="width: 60px; height: 60px;">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge" id="contadorCarrinho">0</span>
+        </button>
+    </div>
+
+    <!-- Modal da Loja -->
+    <div class="modal fade" id="lojaModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="nomeLojaModal">Nome da Loja</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                
-                <div class="store-card">
-                    <h5>📍 Meu Endereço</h5>
-                    <p>Rua das Flores, 123<br>
-                    Centro, São Paulo - SP</p>
-                    <button class="btn btn-outline-secondary btn-sm">
-                        <i class="fas fa-edit"></i> Alterar
+                <div class="modal-body">
+                    <div class="row" id="produtosContainer">
+                        <!-- Produtos serão carregados aqui -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-success" onclick="abrirCarrinho()">
+                        <i class="fas fa-shopping-cart"></i> Ver Carrinho
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Carrinho Lateral -->
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5>🛒 Meu Carrinho</h5>
-                <button class="btn-close" onclick="toggleCart()"></button>
-            </div>
-            
-            <div id="cartItems">
-                <p class="text-muted text-center">Seu carrinho está vazio</p>
-            </div>
-            
-            <div class="border-top pt-3 mt-3">
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Subtotal:</span>
-                    <span id="subtotal">R$ 0,00</span>
+    <!-- Modal do Carrinho -->
+    <div class="modal fade" id="carrinhoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">🛒 Seu Carrinho</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Taxa de entrega:</span>
-                    <span id="taxaEntrega">R$ 0,00</span>
+                <div class="modal-body">
+                    <div id="itensCarrinho">
+                        <!-- Itens do carrinho serão carregados aqui -->
+                    </div>
+                    
+                    <!-- Observações -->
+                    <div class="mt-4">
+                        <label for="observacoes" class="form-label">📝 Observações (opcional):</label>
+                        <textarea class="form-control" id="observacoes" rows="3" placeholder="Ex: Sem cebola, entregar no portão, etc."></textarea>
+                    </div>
+                    
+                    <!-- Forma de Pagamento -->
+                    <div class="mt-4">
+                        <label class="form-label">💳 Forma de Pagamento:</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="pagamento" id="dinheiro" value="Dinheiro" checked>
+                                    <label class="form-check-label" for="dinheiro">💵 Dinheiro</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="pagamento" id="cartao" value="Cartão">
+                                    <label class="form-check-label" for="cartao">💳 Cartão</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="pagamento" id="pix" value="PIX">
+                                    <label class="form-check-label" for="pix">📱 PIX</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="pagamento" id="vale" value="Vale Alimentação">
+                                    <label class="form-check-label" for="vale">🎫 Vale Alimentação</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-between fw-bold">
-                    <span>Total:</span>
-                    <span id="total">R$ 0,00</span>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Total:</h5>
+                            <h5 class="mb-0 text-success" id="totalCarrinho">R$ 0,00</h5>
+                        </div>
+                        <button type="button" class="btn btn-whatsapp w-100" onclick="finalizarPedido()">
+                            <i class="fab fa-whatsapp"></i> Finalizar Pedido via WhatsApp
+                        </button>
+                    </div>
                 </div>
-                
-                <button class="btn btn-success w-100 mt-3" onclick="finalizarPedido()">
-                    Finalizar Pedido via WhatsApp
-                </button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 ZapMercado. Delivery rápido e fácil via WhatsApp!</p>
+            <div class="mt-3">
+                <a href="#" class="text-white me-3"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="#" class="text-white"><i class="fab fa-facebook"></i> Facebook</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // ===== SISTEMA DE INTEGRAÇÃO DE PEDIDOS =====
+        const sistemaIntegrado = {
+            // Dados do cliente (normalmente viria do login)
+            clienteLogado: {
+                nome: 'João Silva',
+                whatsapp: '11999999999',
+                endereco: 'Rua das Flores, 123 - Centro, São Paulo - SP'
+            },
+            
+            // Salvar pedido no localStorage
+            salvarPedido: function(pedido) {
+                // Buscar pedidos existentes
+                let pedidos = JSON.parse(localStorage.getItem('zapMercadoPedidos')) || [];
+                
+                // Adicionar novo pedido
+                const novoPedido = {
+                    id: Date.now(), // ID único baseado no timestamp
+                    dataHora: new Date().toLocaleString('pt-BR'),
+                    status: 'Novo',
+                    cliente: this.clienteLogado,
+                    loja: pedido.loja,
+                    items: pedido.items,
+                    total: pedido.total,
+                    observacoes: pedido.observacoes || '',
+                    formaPagamento: pedido.formaPagamento || 'Dinheiro'
+                };
+                
+                pedidos.push(novoPedido);
+                
+                // Salvar de volta no localStorage
+                localStorage.setItem('zapMercadoPedidos', JSON.stringify(pedidos));
+                
+                // Notificar lojistas (simular notificação)
+                this.notificarLojista(novoPedido);
+                
+                return novoPedido.id;
+            },
+            
+            // Simular notificação para lojista
+            notificarLojista: function(pedido) {
+                // Salvar notificação para o lojista
+                let notificacoes = JSON.parse(localStorage.getItem('zapMercadoNotificacoes')) || [];
+                notificacoes.push({
+                    id: pedido.id,
+                    tipo: 'novo_pedido',
+                    timestamp: Date.now(),
+                    lida: false
+                });
+                localStorage.setItem('zapMercadoNotificacoes', JSON.stringify(notificacoes));
+            }
+        };
+
+        // ===== CÓDIGO PRINCIPAL DO CLIENTE =====
         let carrinho = [];
-        let cartCount = 0;
+        let lojaAtual = null;
+
+        const lojas = [
+            {
+                id: 1,
+                nome: "Mercado São João",
+                tipo: "mercado",
+                avaliacao: 4.8,
+                tempo: "20-30 min",
+                taxa: 3.50,
+                whatsapp: "11999887766",
+                produtos: [
+                    {id: 1, nome: "Arroz Branco 5kg", preco: 15.90, categoria: "grãos", imagem: "🍚"},
+                    {id: 2, nome: "Feijão Preto 1kg", preco: 8.50, categoria: "grãos", imagem: "🫘"},
+                    {id: 3, nome: "Açúcar Cristal 1kg", preco: 4.20, categoria: "açúcar", imagem: "🧂"},
+                    {id: 4, nome: "Óleo de Soja 900ml", preco: 6.80, categoria: "óleo", imagem: "🫗"},
+                    {id: 5, nome: "Macarrão Espaguete 500g", preco: 3.90, categoria: "massas", imagem: "🍝"},
+                    {id: 6, nome: "Leite Integral 1L", preco: 4.50, categoria: "laticínios", imagem: "🥛"},
+                    {id: 7, nome: "Pão de Forma", preco: 5.20, categoria: "padaria", imagem: "🍞"},
+                    {id: 8, nome: "Ovos 12 unidades", preco: 8.90, categoria: "ovos", imagem: "🥚"}
+                ]
+            },
+            {
+                id: 2,
+                nome: "Farmácia Vida",
+                tipo: "drogaria",
+                avaliacao: 4.9,
+                tempo: "15-25 min",
+                taxa: 4.00,
+                whatsapp: "11988776655",
+                produtos: [
+                    {id: 9, nome: "Dipirona 500mg", preco: 8.90, categoria: "medicamentos", imagem: "💊"},
+                    {id: 10, nome: "Vitamina C 1g", preco: 15.50, categoria: "vitaminas", imagem: "🧴"},
+                    {id: 11, nome: "Shampoo Anticaspa", preco: 12.90, categoria: "higiene", imagem: "🧴"},
+                    {id: 12, nome: "Protetor Solar FPS 60", preco: 25.90, categoria: "cosméticos", imagem: "🧴"},
+                    {id: 13, nome: "Termômetro Digital", preco: 18.50, categoria: "equipamentos", imagem: "🌡️"},
+                    {id: 14, nome: "Álcool Gel 70%", preco: 6.90, categoria: "higiene", imagem: "🧴"}
+                ]
+            },
+            {
+                id: 3,
+                nome: "Hortifruti Sempre Verde",
+                tipo: "frutaria",
+                avaliacao: 4.7,
+                tempo: "25-35 min",
+                taxa: 2.50,
+                whatsapp: "11977665544",
+                produtos: [
+                    {id: 15, nome: "Banana Prata (kg)", preco: 4.50, categoria: "frutas", imagem: "🍌"},
+                    {id: 16, nome: "Maçã Gala (kg)", preco: 6.90, categoria: "frutas", imagem: "🍎"},
+                    {id: 17, nome: "Tomate (kg)", preco: 5.20, categoria: "verduras", imagem: "🍅"},
+                    {id: 18, nome: "Alface Americana", preco: 2.80, categoria: "verduras", imagem: "🥬"},
+                    {id: 19, nome: "Cenoura (kg)", preco: 3.50, categoria: "verduras", imagem: "🥕"},
+                    {id: 20, nome: "Laranja Lima (kg)", preco: 4.20, categoria: "frutas", imagem: "🍊"}
+                ]
+            }
+        ];
+
+        function carregarLojas() {
+            const container = document.getElementById('lojasContainer');
+            let html = '';
+            
+            lojas.forEach(loja => {
+                const tipoIcon = loja.tipo === 'mercado' ? '🛒' : loja.tipo === 'drogaria' ? '💊' : '🍎';
+                html += `
+                    <div class="col-md-4 mb-4">
+                        <div class="card loja-card h-100" onclick="abrirLoja(${loja.id})">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title">${tipoIcon} ${loja.nome}</h5>
+                                    <span class="badge bg-success">${loja.avaliacao} ⭐</span>
+                                </div>
+                                <div class="loja-info">
+                                    <div class="info-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>${loja.tempo}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-motorcycle"></i>
+                                        <span>R$ ${loja.taxa.toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
 
         function abrirLoja(lojaId) {
-            alert(`Abrindo loja: ${lojaId}`);
-            // Aqui você redirecionaria para a página da loja específica
+            lojaAtual = lojas.find(l => l.id === lojaId);
+            if (!lojaAtual) return;
+            
+            document.getElementById('nomeLojaModal').textContent = lojaAtual.nome;
+            
+            const container = document.getElementById('produtosContainer');
+            let html = '';
+            
+            lojaAtual.produtos.forEach(produto => {
+                html += `
+                    <div class="col-md-6 mb-3">
+                        <div class="card produto-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <div class="produto-emoji">${produto.imagem}</div>
+                                        <h6 class="card-title">${produto.nome}</h6>
+                                        <p class="produto-preco">R$ ${produto.preco.toFixed(2)}</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="adicionarAoCarrinho(${produto.id})">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            const modal = new bootstrap.Modal(document.getElementById('lojaModal'));
+            modal.show();
         }
 
-        function toggleCart() {
-            const sidebar = document.getElementById('cartSidebar');
-            sidebar.classList.toggle('active');
-        }
-
-        function adicionarAoCarrinho(produto) {
-            carrinho.push(produto);
-            cartCount++;
-            document.getElementById('cartCount').textContent = cartCount;
+        function adicionarAoCarrinho(produtoId) {
+            const produto = lojaAtual.produtos.find(p => p.id === produtoId);
+            if (!produto) return;
+            
+            const itemExistente = carrinho.find(item => item.id === produtoId);
+            
+            if (itemExistente) {
+                itemExistente.quantidade++;
+            } else {
+                carrinho.push({
+                    ...produto,
+                    quantidade: 1,
+                    loja: lojaAtual.nome
+                });
+            }
+            
             atualizarCarrinho();
+            
+            // Feedback visual
+            const btn = event.target.closest('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i>';
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-success');
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-primary');
+            }, 1000);
         }
 
         function atualizarCarrinho() {
-            // Atualizar itens do carrinho
-            // Calcular totais
-        }
-
-        function finalizarPedido() {
+            const contador = document.getElementById('contadorCarrinho');
+            const lista = document.getElementById('itensCarrinho');
+            const total = document.getElementById('totalCarrinho');
+            
+            contador.textContent = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
+            
             if (carrinho.length === 0) {
-                alert('Seu carrinho está vazio!');
+                lista.innerHTML = '<p class="text-muted text-center">Seu carrinho está vazio</p>';
+                total.textContent = 'R$ 0,00';
                 return;
             }
             
-            const mensagem = `Olá! Gostaria de fazer um pedido:\n\n${carrinho.map(item => `${item.nome} - R$ ${item.preco}`).join('\n')}\n\nTotal: R$ ${calcularTotal()}`;
-            const whatsapp = `https://wa.me/5511999999999?text=${encodeURIComponent(mensagem)}`;
-            window.open(whatsapp, '_blank');
+            let html = '';
+            let valorTotal = 0;
+            
+            carrinho.forEach((item, index) => {
+                const subtotal = item.preco * item.quantidade;
+                valorTotal += subtotal;
+                
+                html += `
+                    <div class="carrinho-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">${item.imagem} ${item.nome}</h6>
+                                <small class="text-muted">R$ ${item.preco.toFixed(2)} cada</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="alterarQuantidade(${index}, -1)">-</button>
+                                <span class="mx-2">${item.quantidade}</span>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="alterarQuantidade(${index}, 1)">+</button>
+                                <button class="btn btn-sm btn-outline-danger ms-2" onclick="removerItem(${index})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-end mt-2">
+                            <strong>R$ ${subtotal.toFixed(2)}</strong>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Adicionar taxa de entrega
+            if (lojaAtual) {
+                valorTotal += lojaAtual.taxa;
+                html += `
+                    <div class="carrinho-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">🚚 Taxa de Entrega</h6>
+                                <small class="text-muted">${lojaAtual.nome}</small>
+                            </div>
+                            <div>
+                                <strong>R$ ${lojaAtual.taxa.toFixed(2)}</strong>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            lista.innerHTML = html;
+            total.textContent = `R$ ${valorTotal.toFixed(2)}`;
         }
 
-        function calcularTotal() {
-            return carrinho.reduce((total, item) => total + parseFloat(item.preco), 0).toFixed(2);
+        function alterarQuantidade(index, delta) {
+            carrinho[index].quantidade += delta;
+            
+            if (carrinho[index].quantidade <= 0) {
+                carrinho.splice(index, 1);
+            }
+            
+            atualizarCarrinho();
         }
+
+        function removerItem(index) {
+            carrinho.splice(index, 1);
+            atualizarCarrinho();
+        }
+
+        // ===== FUNÇÃO ATUALIZADA PARA FINALIZAR PEDIDO =====
+        function finalizarPedido() {
+            if (carrinho.length === 0) {
+                alert('❌ Seu carrinho está vazio!');
+                return;
+            }
+            
+            // Calcular total
+            const subtotal = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+            const taxa = lojaAtual.taxa;
+            const total = subtotal + taxa;
+            
+            // Criar objeto do pedido
+            const pedido = {
+                loja: {
+                    nome: lojaAtual.nome,
+                    whatsapp: lojaAtual.whatsapp,
+                    taxa: taxa
+                },
+                items: [...carrinho],
+                total: total,
+                observacoes: document.getElementById('observacoes')?.value || '',
+                formaPagamento: document.querySelector('input[name="pagamento"]:checked')?.value || 'Dinheiro'
+            };
+            
+            // ✅ SALVAR NO SISTEMA INTEGRADO
+            const pedidoId = sistemaIntegrado.salvarPedido(pedido);
+            
+            // Limpar carrinho
+            carrinho = [];
+            atualizarCarrinho();
+            
+            // Mostrar confirmação
+            alert(`✅ Pedido #${pedidoId} enviado com sucesso!
+
+📋 Resumo:
+🏪 Loja: ${pedido.loja.nome}
+💰 Total: R$ ${total.toFixed(2)}
+📱 WhatsApp: ${pedido.loja.whatsapp}
+
+A loja foi notificada e entrará em contato via WhatsApp!`);
+            
+            // Fechar modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('carrinhoModal'));
+            if (modal) modal.hide();
+        }
+
+        function abrirCarrinho() {
+            const modal = new bootstrap.Modal(document.getElementById('carrinhoModal'));
+            modal.show();
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarLojas();
+        });
     </script>
 </body>
 </html>
