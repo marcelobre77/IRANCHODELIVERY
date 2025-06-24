@@ -189,11 +189,14 @@
             <div class="navbar-nav ms-auto">
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user-circle"></i> Mercado São João
+                        <i class="fas fa-user-circle"></i> Carregando...
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Configurações</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+                        <li><a class="dropdown-item" href="#configuracoes" data-bs-toggle="pill" data-bs-target="#configuracoes">
+                            <i class="fas fa-cog"></i> Configurações</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Sair</a></li>
                     </ul>
                 </div>
             </div>
@@ -206,7 +209,7 @@
             <div class="col-md-3 col-lg-2 sidebar p-3">
                 <div class="text-center mb-4">
                     <i class="fas fa-store fa-3x mb-2"></i>
-                    <h5>Painel do Lojista</h5>
+                    <h5>Carregando...</h5>
                 </div>
                 
                 <ul class="nav nav-pills flex-column" id="pills-tab" role="tablist">
@@ -456,22 +459,30 @@
                                         <h5>🏪 Informações da Loja</h5>
                                     </div>
                                     <div class="card-body">
-                                        <form>
+                                        <form id="formConfiguracoes">
                                             <div class="mb-3">
                                                 <label class="form-label">Nome da Loja</label>
-                                                <input type="text" class="form-control" value="Mercado São João">
+                                                <input type="text" class="form-control" id="configNomeLoja">
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">WhatsApp</label>
-                                                <input type="text" class="form-control" value="(11) 99988-7766">
+                                                <input type="text" class="form-control" id="configWhatsapp">
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Taxa de Entrega (R$)</label>
-                                                <input type="number" class="form-control" value="3.50" step="0.50">
+                                                <input type="number" class="form-control" id="configTaxa" step="0.50">
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Tempo de Entrega</label>
-                                                <input type="text" class="form-control" value="20-30 min">
+                                                <input type="text" class="form-control" id="configTempo">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Endereço</label>
+                                                <textarea class="form-control" id="configEndereco" rows="2"></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Responsável</label>
+                                                <input type="text" class="form-control" id="configResponsavel">
                                             </div>
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-save"></i> Salvar Alterações
@@ -558,17 +569,59 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ===== SISTEMA DE PEDIDOS PARA LOJISTA =====
+        // ===== SISTEMA DE AUTENTICAÇÃO DO LOJISTA =====
+        let lojistaAtual = null;
+        
+        // Verificar se o lojista está logado
+        function verificarLogin() {
+            const dadosLojista = localStorage.getItem('zapMercadoLojista');
+            
+            if (!dadosLojista) {
+                alert('❌ Você precisa fazer login primeiro!');
+                window.location.href = 'cadastro-lojista.html';
+                return false;
+            }
+            
+            lojistaAtual = JSON.parse(dadosLojista);
+            
+            // Atualizar interface com dados do lojista
+            document.querySelector('.navbar-nav .dropdown-toggle').innerHTML = 
+                `<i class="fas fa-user-circle"></i> ${lojistaAtual.nome}`;
+            
+            // Atualizar título da sidebar
+            document.querySelector('.sidebar h5').textContent = lojistaAtual.nome;
+            
+            // Carregar dados nas configurações
+            carregarConfiguracoes();
+            
+            return true;
+        }
+        
+        // Carregar dados nas configurações
+        function carregarConfiguracoes() {
+            if (!lojistaAtual) return;
+            
+            document.getElementById('configNomeLoja').value = lojistaAtual.nome || '';
+            document.getElementById('configWhatsapp').value = lojistaAtual.whatsapp || '';
+            document.getElementById('configTaxa').value = lojistaAtual.taxa || '';
+            document.getElementById('configTempo').value = lojistaAtual.tempo || '';
+            document.getElementById('configEndereco').value = lojistaAtual.endereco || '';
+            document.getElementById('configResponsavel').value = lojistaAtual.responsavel || '';
+        }
+        
+        // Logout
+        function logout() {
+            if (confirm('🚪 Deseja realmente sair?')) {
+                localStorage.removeItem('zapMercadoLojista');
+                window.location.href = 'cadastro-lojista.html';
+            }
+        }
+
+        // ===== SISTEMA DE PEDIDOS =====
         let pedidosCarregados = [];
         let pedidoSelecionado = null;
         let notificacoes = [];
         let autoRefreshInterval = null;
-
-        // Lojista atual (normalmente viria do login)
-        const lojistaAtual = {
-            nome: 'Mercado São João',
-            whatsapp: '11999887766'
-        };
 
         // Produtos da loja
         let produtosLoja = [
@@ -617,54 +670,3 @@
             atualizarContadorNotificacoes();
             atualizarDashboard();
         }
-
-        // Atualizar lista de pedidos
-        function atualizarPedidos() {
-            // Animação de loading
-            const iconRefresh = document.getElementById('iconRefresh');
-            iconRefresh.classList.add('auto-refresh');
-            
-            setTimeout(() => {
-                iconRefresh.classList.remove('auto-refresh');
-            }, 1000);
-
-            const pedidos = carregarPedidos();
-            carregarNotificacoes();
-            
-            const listaPedidos = document.getElementById('listaPedidos');
-            const contador = document.getElementById('contadorPedidos');
-            
-            // Filtrar pedidos para esta loja
-            const pedidosLoja = pedidos.filter(p => p.loja.nome === lojistaAtual.nome);
-            
-            const pedidosNovos = pedidosLoja.filter(p => p.status === 'Novo').length;
-            contador.textContent = pedidosNovos;
-            document.getElementById('badgePedidos').textContent = pedidosNovos;
-            
-            atualizarContadorNotificacoes();
-            
-            if (pedidosLoja.length === 0) {
-                listaPedidos.innerHTML = `
-                    <div class="text-center py-5">
-                        <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">Nenhum pedido encontrado</p>
-                        <small class="text-muted">Os pedidos aparecerão aqui automaticamente quando os clientes fizerem compras</small>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            pedidosLoja.reverse().forEach(pedido => {
-                const statusClass = getStatusClass(pedido.status);
-                const statusIcon = getStatusIcon(pedido.status);
-                const isNovo = pedido.status === 'Novo';
-                
-                html += `
-                    <div class="card mb-3 pedido-card ${isNovo ? 'pulse' : ''}" data-status="${pedido.status}" data-id="${pedido.id}">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-md-2">
-                                    <h5 class="mb-0">#${pedido.id}</h5>
-                                    <small class="text-muted">${pedido.dataHora}</small>
-                                    ${isNovo ? '<span class="badge bg
