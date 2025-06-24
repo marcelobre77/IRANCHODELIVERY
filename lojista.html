@@ -188,7 +188,7 @@
             </a>
             <div class="navbar-nav ms-auto">
                 <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="nomeLojistaNav">
                         <i class="fas fa-user-circle"></i> Carregando...
                     </a>
                     <ul class="dropdown-menu">
@@ -209,7 +209,7 @@
             <div class="col-md-3 col-lg-2 sidebar p-3">
                 <div class="text-center mb-4">
                     <i class="fas fa-store fa-3x mb-2"></i>
-                    <h5>Carregando...</h5>
+                    <h5 id="nomeLojistaSidebar">Carregando...</h5>
                 </div>
                 
                 <ul class="nav nav-pills flex-column" id="pills-tab" role="tablist">
@@ -459,7 +459,7 @@
                                         <h5>🏪 Informações da Loja</h5>
                                     </div>
                                     <div class="card-body">
-                                        <form id="formConfiguracoes">
+                                        <form id="formConfiguracoes" onsubmit="salvarConfiguracoes(event)">
                                             <div class="mb-3">
                                                 <label class="form-label">Nome da Loja</label>
                                                 <input type="text" class="form-control" id="configNomeLoja">
@@ -528,7 +528,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formProduto">
+                    <form id="formProduto" onsubmit="adicionarProduto(event)">
                         <div class="mb-3">
                             <label class="form-label">Nome do Produto</label>
                             <input type="text" class="form-control" id="nomeProduto" required>
@@ -559,7 +559,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" onclick="adicionarProduto()">
+                    <button type="button" class="btn btn-success" onclick="adicionarProduto(event)">
                         <i class="fas fa-plus"></i> Adicionar
                     </button>
                 </div>
@@ -571,6 +571,11 @@
     <script>
         // ===== SISTEMA DE AUTENTICAÇÃO DO LOJISTA =====
         let lojistaAtual = null;
+        let pedidosCarregados = [];
+        let pedidoSelecionado = null;
+        let notificacoes = [];
+        let autoRefreshInterval = null;
+        let produtosLoja = [];
         
         // Verificar se o lojista está logado
         function verificarLogin() {
@@ -583,13 +588,14 @@
             }
             
             lojistaAtual = JSON.parse(dadosLojista);
+            console.log('Lojista carregado:', lojistaAtual);
             
             // Atualizar interface com dados do lojista
-            document.querySelector('.navbar-nav .dropdown-toggle').innerHTML = 
+            document.getElementById('nomeLojistaNav').innerHTML = 
                 `<i class="fas fa-user-circle"></i> ${lojistaAtual.nome}`;
             
             // Atualizar título da sidebar
-            document.querySelector('.sidebar h5').textContent = lojistaAtual.nome;
+            document.getElementById('nomeLojistaSidebar').textContent = lojistaAtual.nome;
             
             // Carregar dados nas configurações
             carregarConfiguracoes();
@@ -609,6 +615,31 @@
             document.getElementById('configResponsavel').value = lojistaAtual.responsavel || '';
         }
         
+        // Salvar configurações
+        function salvarConfiguracoes(event) {
+            event.preventDefault();
+            
+            if (!lojistaAtual) return;
+            
+            // Atualizar dados do lojista
+            lojistaAtual.nome = document.getElementById('configNomeLoja').value;
+            lojistaAtual.whatsapp = document.getElementById('configWhatsapp').value;
+            lojistaAtual.taxa = parseFloat(document.getElementById('configTaxa').value);
+            lojistaAtual.tempo = document.getElementById('configTempo').value;
+            lojistaAtual.endereco = document.getElementById('configEndereco').value;
+            lojistaAtual.responsavel = document.getElementById('configResponsavel').value;
+            
+            // Salvar no localStorage
+            localStorage.setItem('zapMercadoLojista', JSON.stringify(lojistaAtual));
+            
+            // Atualizar interface
+            document.getElementById('nomeLojistaNav').innerHTML = 
+                `<i class="fas fa-user-circle"></i> ${lojistaAtual.nome}`;
+            document.getElementById('nomeLojistaSidebar').textContent = lojistaAtual.nome;
+            
+            alert('✅ Configurações salvas com sucesso!');
+        }
+        
         // Logout
         function logout() {
             if (confirm('🚪 Deseja realmente sair?')) {
@@ -617,56 +648,22 @@
             }
         }
 
-        // ===== SISTEMA DE PEDIDOS =====
-        let pedidosCarregados = [];
-        let pedidoSelecionado = null;
-        let notificacoes = [];
-        let autoRefreshInterval = null;
-
-        // Produtos da loja
-        let produtosLoja = [
-            {id: 1, nome: "Arroz Branco 5kg", preco: 15.90, categoria: "grãos", imagem: "🍚"},
-            {id: 2, nome: "Feijão Preto 1kg", preco: 8.50, categoria: "grãos", imagem: "🫘"},
-            {id: 3, nome: "Açúcar Cristal 1kg", preco: 4.20, categoria: "açúcar", imagem: "🧂"},
-            {id: 4, nome: "Óleo de Soja 900ml", preco: 6.80, categoria: "óleo", imagem: "🫗"},
-            {id: 5, nome: "Macarrão Espaguete 500g", preco: 3.90, categoria: "massas", imagem: "🍝"},
-            {id: 6, nome: "Leite Integral 1L", preco: 4.50, categoria: "laticínios", imagem: "🥛"},
-            {id: 7, nome: "Pão de Forma", preco: 5.20, categoria: "padaria", imagem: "🍞"},
-            {id: 8, nome: "Ovos 12 unidades", preco: 8.90, categoria: "ovos", imagem: "🥚"}
-        ];
-
-        // Carregar pedidos do localStorage
-        function carregarPedidos() {
-            const dados = localStorage.getItem('zapMercadoPedidos');
+        // ===== SISTEMA DE PRODUTOS =====
+        
+        // Carregar produtos do localStorage
+        function carregarProdutosLoja() {
+            if (!lojistaAtual) return;
+            
+            const chave = `zapMercadoProdutos_${lojistaAtual.id}`;
+            const dados = localStorage.getItem(chave);
+            
             if (dados) {
-                pedidosCarregados = JSON.parse(dados);
+                produtosLoja = JSON.parse(dados);
             } else {
-                pedidosCarregados = [];
-            }
-            return pedidosCarregados;
-        }
-
-        // Carregar notificações
-        function carregarNotificacoes() {
-            const dados = localStorage.getItem('zapMercadoNotificacoes');
-            if (dados) {
-                notificacoes = JSON.parse(dados);
-            } else {
-                notificacoes = [];
-            }
-            return notificacoes;
-        }
-
-        // Atualizar contador de notificações
-        function atualizarContadorNotificacoes() {
-            const naoLidas = notificacoes.filter(n => !n.lida).length;
-            document.getElementById('contadorNotificacoes').textContent = naoLidas;
-        }
-
-        // Marcar todas as notificações como lidas
-        function marcarTodasNotificacoesLidas() {
-            notificacoes.forEach(n => n.lida = true);
-            localStorage.setItem('zapMercadoNotificacoes', JSON.stringify(notificacoes));
-            atualizarContadorNotificacoes();
-            atualizarDashboard();
-        }
+                // Produtos padrão para nova loja
+                produtosLoja = [
+                    {id: 1, nome: "Arroz Branco 5kg", preco: 15.90, categoria: "grãos", imagem: "🍚"},
+                    {id: 2, nome: "Feijão Preto 1kg", preco: 8.50, categoria: "grãos", imagem: "🫘"},
+                    {id: 3, nome: "Açúcar Cristal 1kg", preco: 4.20, categoria: "açúcar", imagem: "🧂"},
+                    {id: 4, nome: "Óleo de Soja 900ml", preco: 6.80, categoria: "óleo", imagem: "🫗"},
+                    {id: 5, nome:
