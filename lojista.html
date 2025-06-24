@@ -1,261 +1,673 @@
+## **📄 ARQUIVO COMPLETO: `lojista.html`**
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏪 Painel do Lojista - ZAP MERCADO</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>ZapMercado - Painel do Lojista</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #28a745;
-            --secondary-color: #ffc107;
+        .navbar-brand {
+            font-weight: bold;
+            color: #25D366 !important;
         }
         
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .sidebar {
             min-height: 100vh;
-        }
-        
-        .dashboard-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .stat-card {
-            background: linear-gradient(45deg, var(--primary-color), #20c997);
+            background: linear-gradient(135deg, #25D366, #128C7E);
             color: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
         }
         
-        .product-card {
-            border: 1px solid #e9ecef;
+        .nav-pills .nav-link {
+            color: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .nav-pills .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .card-stats {
+            border-left: 4px solid #25D366;
+            transition: transform 0.2s;
+        }
+        
+        .card-stats:hover {
+            transform: translateY(-2px);
+        }
+        
+        .pedido-card {
+            transition: all 0.3s;
+            border-left: 4px solid #dee2e6;
+        }
+        
+        .pedido-card[data-status="Novo"] {
+            border-left-color: #ffc107;
+            background-color: #fff8e1;
+        }
+        
+        .pedido-card[data-status="Confirmado"] {
+            border-left-color: #28a745;
+        }
+        
+        .pedido-card[data-status="Preparando"] {
+            border-left-color: #17a2b8;
+        }
+        
+        .pedido-card[data-status="Saiu para Entrega"] {
+            border-left-color: #6f42c1;
+        }
+        
+        .pedido-card[data-status="Entregue"] {
+            border-left-color: #20c997;
+        }
+        
+        .pedido-card[data-status="Cancelado"] {
+            border-left-color: #dc3545;
+            background-color: #f8d7da;
+        }
+        
+        .produto-card {
+            transition: transform 0.2s;
+        }
+        
+        .produto-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .produto-emoji {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            border-color: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #20B358;
+            border-color: #20B358;
+            color: white;
+        }
+        
+        .table-pedidos {
+            font-size: 0.9rem;
+        }
+        
+        .cliente-info {
+            background-color: #f8f9fa;
+            border-radius: 8px;
             padding: 15px;
             margin-bottom: 15px;
+        }
+        
+        .pedido-timeline {
+            border-left: 3px solid #25D366;
+            padding-left: 20px;
+            margin-left: 10px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #25D366;
+        }
+        
+        .auto-refresh {
+            animation: spin 2s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                🏪 ZAP MERCADO - Lojista
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fab fa-whatsapp"></i> ZapMercado - Lojista
             </a>
             <div class="navbar-nav ms-auto">
-                <span class="navbar-text me-3">Olá, João da Silva!</span>
-                <a class="nav-link" href="index.html">Sair</a>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i> Mercado São João
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Configurações</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <!-- Estatísticas -->
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <h3>45</h3>
-                    <p>Produtos Cadastrados</p>
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-3">
+                <div class="text-center mb-4">
+                    <i class="fas fa-store fa-3x mb-2"></i>
+                    <h5>Painel do Lojista</h5>
                 </div>
+                
+                <ul class="nav nav-pills flex-column" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active w-100 text-start" id="dashboard-tab" data-bs-toggle="pill" data-bs-target="#dashboard" type="button">
+                            <i class="fas fa-chart-line me-2"></i> Dashboard
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link w-100 text-start" id="pedidos-tab" data-bs-toggle="pill" data-bs-target="#pedidos" type="button">
+                            <i class="fas fa-shopping-bag me-2"></i> Pedidos
+                            <span class="badge bg-danger ms-2" id="badgePedidos">0</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link w-100 text-start" id="produtos-tab" data-bs-toggle="pill" data-bs-target="#produtos" type="button">
+                            <i class="fas fa-box me-2"></i> Produtos
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link w-100 text-start" id="relatorios-tab" data-bs-toggle="pill" data-bs-target="#relatorios" type="button">
+                            <i class="fas fa-chart-bar me-2"></i> Relatórios
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link w-100 text-start" id="configuracoes-tab" data-bs-toggle="pill" data-bs-target="#configuracoes" type="button">
+                            <i class="fas fa-cog me-2"></i> Configurações
+                        </button>
+                    </li>
+                </ul>
             </div>
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <h3>128</h3>
-                    <p>Pedidos Este Mês</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <h3>R$ 3.450</h3>
-                    <p>Faturamento</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <h3>4.8⭐</h3>
-                    <p>Avaliação</p>
+
+            <!-- Conteúdo Principal -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <div class="tab-content" id="pills-tabContent">
+                    
+                    <!-- Dashboard -->
+                    <div class="tab-pane fade show active" id="dashboard">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2>📊 Dashboard</h2>
+                            <div class="text-muted">
+                                <i class="fas fa-calendar"></i> Hoje: <span id="dataAtual"></span>
+                            </div>
+                        </div>
+
+                        <!-- Cards de Estatísticas -->
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-3">
+                                <div class="card card-stats h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <p class="card-category text-muted">Pedidos Hoje</p>
+                                                <h3 class="card-title text-primary" id="pedidosHoje">0</h3>
+                                            </div>
+                                            <div class="text-primary">
+                                                <i class="fas fa-shopping-bag fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card card-stats h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <p class="card-category text-muted">Faturamento Hoje</p>
+                                                <h3 class="card-title text-success" id="faturamentoHoje">R$ 0,00</h3>
+                                            </div>
+                                            <div class="text-success">
+                                                <i class="fas fa-dollar-sign fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card card-stats h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <p class="card-category text-muted">Pedidos Pendentes</p>
+                                                <h3 class="card-title text-warning" id="pedidosPendentes">0</h3>
+                                            </div>
+                                            <div class="text-warning">
+                                                <i class="fas fa-clock fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card card-stats h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <p class="card-category text-muted">Avaliação Média</p>
+                                                <h3 class="card-title text-info">4.8 ⭐</h3>
+                                            </div>
+                                            <div class="text-info">
+                                                <i class="fas fa-star fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pedidos Recentes -->
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>📋 Pedidos Recentes</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="pedidosRecentes">
+                                            <div class="text-center py-3">
+                                                <i class="fas fa-shopping-bag fa-2x text-muted mb-2"></i>
+                                                <p class="text-muted">Carregando pedidos...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>🔔 Notificações</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="notificacoesDashboard">
+                                            <div class="text-center py-3">
+                                                <i class="fas fa-bell fa-2x text-muted mb-2"></i>
+                                                <p class="text-muted">Nenhuma notificação</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pedidos -->
+                    <div class="tab-pane fade" id="pedidos">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3>📋 Gerenciar Pedidos</h3>
+                            <div>
+                                <button class="btn btn-primary" onclick="atualizarPedidos()">
+                                    <i class="fas fa-sync-alt" id="iconRefresh"></i> Atualizar
+                                </button>
+                                <span class="badge bg-danger ms-2" id="contadorPedidos">0</span>
+                                <span class="badge bg-warning ms-1" id="contadorNotificacoes">0</span>
+                            </div>
+                        </div>
+
+                        <!-- Filtros -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <select class="form-select" id="filtroStatus" onchange="filtrarPedidos()">
+                                    <option value="">Todos os Status</option>
+                                    <option value="Novo">🆕 Novos</option>
+                                    <option value="Confirmado">✅ Confirmados</option>
+                                    <option value="Preparando">👨‍🍳 Preparando</option>
+                                    <option value="Saiu para Entrega">🚚 Saiu para Entrega</option>
+                                    <option value="Entregue">📦 Entregues</option>
+                                    <option value="Cancelado">❌ Cancelados</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" class="form-control" id="filtroData" onchange="filtrarPedidos()">
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <button class="btn btn-success" onclick="marcarTodasNotificacoesLidas()">
+                                    <i class="fas fa-check-double"></i> Marcar Todas como Lidas
+                                </button>
+                                <button class="btn btn-info ms-2" onclick="ativarAutoRefresh()">
+                                    <i class="fas fa-sync"></i> Auto-Refresh
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Lista de Pedidos -->
+                        <div id="listaPedidos">
+                            <div class="text-center py-5">
+                                <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">Carregando pedidos...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produtos -->
+                    <div class="tab-pane fade" id="produtos">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3>📦 Gerenciar Produtos</h3>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#adicionarProdutoModal">
+                                <i class="fas fa-plus"></i> Adicionar Produto
+                            </button>
+                        </div>
+
+                        <div class="row" id="listaProdutos">
+                            <!-- Produtos serão carregados aqui -->
+                        </div>
+                    </div>
+
+                    <!-- Relatórios -->
+                    <div class="tab-pane fade" id="relatorios">
+                        <h3 class="mb-4">📊 Relatórios</h3>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>📈 Vendas por Período</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="chartVendas"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>🥇 Produtos Mais Vendidos</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="produtosMaisVendidos">
+                                            <!-- Lista será gerada aqui -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configurações -->
+                    <div class="tab-pane fade" id="configuracoes">
+                        <h3 class="mb-4">⚙️ Configurações da Loja</h3>
+                        
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>🏪 Informações da Loja</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nome da Loja</label>
+                                                <input type="text" class="form-control" value="Mercado São João">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">WhatsApp</label>
+                                                <input type="text" class="form-control" value="(11) 99988-7766">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Taxa de Entrega (R$)</label>
+                                                <input type="number" class="form-control" value="3.50" step="0.50">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Tempo de Entrega</label>
+                                                <input type="text" class="form-control" value="20-30 min">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save"></i> Salvar Alterações
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="row">
-            <!-- Gerenciar Produtos -->
-            <div class="col-md-8">
-                <div class="dashboard-card">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4>📦 Meus Produtos</h4>
-                        <button class="btn btn-success" onclick="adicionarProduto()">
-                            <i class="fas fa-plus"></i> Adicionar Produto
-                        </button>
-                    </div>
-                    
-                    <div id="listaProdutos">
-                        <div class="product-card">
-                            <div class="row align-items-center">
-                                <div class="col-md-2">
-                                    <img src="https://via.placeholder.com/80x80" class="img-fluid rounded">
-                                </div>
-                                <div class="col-md-4">
-                                    <h6>Arroz Tio João 5kg</h6>
-                                    <small class="text-muted">Categoria: Alimentos</small>
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>R$ 18,90</strong>
-                                </div>
-                                <div class="col-md-2">
-                                    <span class="badge bg-success">Ativo</span>
-                                </div>
-                                <div class="col-md-2">
-                                    <button class="btn btn-sm btn-outline-primary me-1">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="product-card">
-                            <div class="row align-items-center">
-                                <div class="col-md-2">
-                                    <img src="https://via.placeholder.com/80x80" class="img-fluid rounded">
-                                </div>
-                                <div class="col-md-4">
-                                    <h6>Feijão Carioca 1kg</h6>
-                                    <small class="text-muted">Categoria: Alimentos</small>
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>R$ 7,50</strong>
-                                </div>
-                                <div class="col-md-2">
-                                    <span class="badge bg-success">Ativo</span>
-                                </div>
-                                <div class="col-md-2">
-                                    <button class="btn btn-sm btn-outline-primary me-1">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Modal de Detalhes do Pedido -->
+    <div class="modal fade" id="detalhesPedidoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">📋 Detalhes do Pedido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-            </div>
-
-            <!-- Pedidos Recentes -->
-            <div class="col-md-4">
-                <div class="dashboard-card">
-                    <h4>📋 Pedidos Recentes</h4>
-                    
-                    <div class="border-bottom pb-3 mb-3">
-                        <div class="d-flex justify-content-between">
-                            <strong>Pedido #001</strong>
-                            <span class="badge bg-warning">Pendente</span>
-                        </div>
-                        <small>Maria Silva - R$ 45,80</small><br>
-                        <small class="text-muted">Há 5 minutos</small>
-                        <div class="mt-2">
-                            <button class="btn btn-sm btn-success me-1">Aceitar</button>
-                            <button class="btn btn-sm btn-outline-secondary">Ver</button>
-                        </div>
-                    </div>
-                    
-                    <div class="border-bottom pb-3 mb-3">
-                        <div class="d-flex justify-content-between">
-                            <strong>Pedido #002</strong>
-                            <span class="badge bg-info">Preparando</span>
-                        </div>
-                        <small>João Santos - R$ 32,50</small><br>
-                        <small class="text-muted">Há 15 minutos</small>
-                        <div class="mt-2">
-                            <button class="btn btn-sm btn-primary me-1">Pronto</button>
-                            <button class="btn btn-sm btn-outline-secondary">Ver</button>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center">
-                        <button class="btn btn-outline-primary">Ver Todos os Pedidos</button>
-                    </div>
+                <div class="modal-body" id="detalhesPedidoConteudo">
+                    <!-- Conteúdo será preenchido dinamicamente -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-whatsapp" onclick="contatarCliente()">
+                        <i class="fab fa-whatsapp"></i> Contatar Cliente
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Adicionar Produto -->
-    <div class="modal fade" id="produtoModal" tabindex="-1">
+    <div class="modal fade" id="adicionarProdutoModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">📦 Adicionar Produto</h5>
+                    <h5 class="modal-title">➕ Adicionar Produto</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="produtoForm">
+                    <form id="formProduto">
                         <div class="mb-3">
                             <label class="form-label">Nome do Produto</label>
-                            <input type="text" class="form-control" required>
+                            <input type="text" class="form-control" id="nomeProduto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Preço (R$)</label>
+                            <input type="number" class="form-control" id="precoProduto" step="0.01" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Categoria</label>
-                            <select class="form-control" required>
+                            <select class="form-select" id="categoriaProduto" required>
                                 <option value="">Selecione...</option>
-                                <option value="alimentos">Alimentos</option>
+                                <option value="grãos">Grãos</option>
+                                <option value="laticínios">Laticínios</option>
+                                <option value="carnes">Carnes</option>
+                                <option value="frutas">Frutas</option>
+                                <option value="verduras">Verduras</option>
                                 <option value="bebidas">Bebidas</option>
                                 <option value="limpeza">Limpeza</option>
                                 <option value="higiene">Higiene</option>
                             </select>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Preço (R$)</label>
-                                    <input type="number" class="form-control" step="0.01" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Estoque</label>
-                                    <input type="number" class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
                         <div class="mb-3">
-                            <label class="form-label">Descrição</label>
-                            <textarea class="form-control" rows="3"></textarea>
+                            <label class="form-label">Emoji</label>
+                            <input type="text" class="form-control" id="emojiProduto" placeholder="🍎" maxlength="2">
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Imagem</label>
-                            <input type="file" class="form-control" accept="image/*">
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">Cadastrar Produto</button>
                     </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="adicionarProduto()">
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function adicionarProduto() {
-            const modal = new bootstrap.Modal(document.getElementById('produtoModal'));
-            modal.show();
+        // ===== SISTEMA DE PEDIDOS PARA LOJISTA =====
+        let pedidosCarregados = [];
+        let pedidoSelecionado = null;
+        let notificacoes = [];
+        let autoRefreshInterval = null;
+
+        // Lojista atual (normalmente viria do login)
+        const lojistaAtual = {
+            nome: 'Mercado São João',
+            whatsapp: '11999887766'
+        };
+
+        // Produtos da loja
+        let produtosLoja = [
+            {id: 1, nome: "Arroz Branco 5kg", preco: 15.90, categoria: "grãos", imagem: "🍚"},
+            {id: 2, nome: "Feijão Preto 1kg", preco: 8.50, categoria: "grãos", imagem: "🫘"},
+            {id: 3, nome: "Açúcar Cristal 1kg", preco: 4.20, categoria: "açúcar", imagem: "🧂"},
+            {id: 4, nome: "Óleo de Soja 900ml", preco: 6.80, categoria: "óleo", imagem: "🫗"},
+            {id: 5, nome: "Macarrão Espaguete 500g", preco: 3.90, categoria: "massas", imagem: "🍝"},
+            {id: 6, nome: "Leite Integral 1L", preco: 4.50, categoria: "laticínios", imagem: "🥛"},
+            {id: 7, nome: "Pão de Forma", preco: 5.20, categoria: "padaria", imagem: "🍞"},
+            {id: 8, nome: "Ovos 12 unidades", preco: 8.90, categoria: "ovos", imagem: "🥚"}
+        ];
+
+        // Carregar pedidos do localStorage
+        function carregarPedidos() {
+            const dados = localStorage.getItem('zapMercadoPedidos');
+            if (dados) {
+                pedidosCarregados = JSON.parse(dados);
+            } else {
+                pedidosCarregados = [];
+            }
+            return pedidosCarregados;
         }
 
-        document.getElementById('produtoForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Produto cadastrado com sucesso!');
-            bootstrap.Modal.getInstance(document.getElementById('produtoModal')).hide();
-        });
-    </script>
-</body>
-</html>
+        // Carregar notificações
+        function carregarNotificacoes() {
+            const dados = localStorage.getItem('zapMercadoNotificacoes');
+            if (dados) {
+                notificacoes = JSON.parse(dados);
+            } else {
+                notificacoes = [];
+            }
+            return notificacoes;
+        }
+
+        // Atualizar contador de notificações
+        function atualizarContadorNotificacoes() {
+            const naoLidas = notificacoes.filter(n => !n.lida).length;
+            document.getElementById('contadorNotificacoes').textContent = naoLidas;
+        }
+
+        // Marcar todas as notificações como lidas
+        function marcarTodasNotificacoesLidas() {
+            notificacoes.forEach(n => n.lida = true);
+            localStorage.setItem('zapMercadoNotificacoes', JSON.stringify(notificacoes));
+            atualizarContadorNotificacoes();
+            atualizarDashboard();
+        }
+
+        // Atualizar lista de pedidos
+        function atualizarPedidos() {
+            // Animação de loading
+            const iconRefresh = document.getElementById('iconRefresh');
+            iconRefresh.classList.add('auto-refresh');
+            
+            setTimeout(() => {
+                iconRefresh.classList.remove('auto-refresh');
+            }, 1000);
+
+            const pedidos = carregarPedidos();
+            carregarNotificacoes();
+            
+            const listaPedidos = document.getElementById('listaPedidos');
+            const contador = document.getElementById('contadorPedidos');
+            
+            // Filtrar pedidos para esta loja
+            const pedidosLoja = pedidos.filter(p => p.loja.nome === lojistaAtual.nome);
+            
+            const pedidosNovos = pedidosLoja.filter(p => p.status === 'Novo').length;
+            contador.textContent = pedidosNovos;
+            document.getElementById('badgePedidos').textContent = pedidosNovos;
+            
+            atualizarContadorNotificacoes();
+            
+            if (pedidosLoja.length === 0) {
+                listaPedidos.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Nenhum pedido encontrado</p>
+                        <small class="text-muted">Os pedidos aparecerão aqui automaticamente quando os clientes fizerem compras</small>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            pedidosLoja.reverse().forEach(pedido => {
+                const statusClass = getStatusClass(pedido.status);
+                const statusIcon = getStatusIcon(pedido.status);
+                const isNovo = pedido.status === 'Novo';
+                
+                html += `
+                    <div class="card mb-3 pedido-card ${isNovo ? 'pulse' : ''}" data-status="${pedido.status}" data-id="${pedido.id}">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <h5 class="mb-0">#${pedido.id}</h5>
+                                    <small class="text-muted">${pedido.dataHora}</small>
+                                    ${isNovo ? '<span class="badge bg
