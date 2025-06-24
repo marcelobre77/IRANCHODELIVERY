@@ -58,10 +58,48 @@
             margin-bottom: 10px;
         }
         
+        .produto-imagem {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
         .produto-preco {
             font-size: 1.2rem;
             font-weight: bold;
             color: #25D366;
+        }
+        
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: #25D366;
+            background-color: #f8f9fa;
+        }
+        
+        .upload-area.dragover {
+            border-color: #25D366;
+            background-color: #e8f5e8;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .image-controls {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -296,7 +334,7 @@
 
     <!-- Modal Adicionar/Editar Produto -->
     <div class="modal fade" id="produtoModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="produtoModalTitle">➕ Adicionar Produto</h5>
@@ -305,41 +343,69 @@
                 <div class="modal-body">
                     <form id="formProduto">
                         <input type="hidden" id="produtoId">
-                        <div class="mb-3">
-                            <label class="form-label">Nome do Produto *</label>
-                            <input type="text" class="form-control" id="nomeProduto" required 
-                                   placeholder="Ex: Arroz Branco 5kg">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Preço (R$) *</label>
-                            <input type="number" class="form-control" id="precoProduto" 
-                                   step="0.01" min="0" required placeholder="Ex: 15.90">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Categoria *</label>
-                            <select class="form-select" id="categoriaProduto" required>
-                                <option value="">Selecione uma categoria...</option>
-                                <option value="grãos">🌾 Grãos e Cereais</option>
-                                <option value="laticínios">🥛 Laticínios</option>
-                                <option value="carnes">🥩 Carnes e Aves</option>
-                                <option value="frutas">🍎 Frutas</option>
-                                <option value="verduras">🥬 Verduras e Legumes</option>
-                                <option value="bebidas">🥤 Bebidas</option>
-                                <option value="limpeza">🧽 Produtos de Limpeza</option>
-                                <option value="higiene">🧼 Higiene Pessoal</option>
-                                <option value="outros">📦 Outros</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Emoji (Opcional)</label>
-                            <input type="text" class="form-control" id="emojiProduto" 
-                                   placeholder="🍎" maxlength="2">
-                            <small class="text-muted">Escolha um emoji que represente seu produto</small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Descrição (Opcional)</label>
-                            <textarea class="form-control" id="descricaoProduto" rows="2" 
-                                      placeholder="Descrição do produto..."></textarea>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nome do Produto *</label>
+                                    <input type="text" class="form-control" id="nomeProduto" required 
+                                           placeholder="Ex: Arroz Branco 5kg">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Preço (R$) *</label>
+                                    <input type="number" class="form-control" id="precoProduto" 
+                                           step="0.01" min="0" required placeholder="Ex: 15.90">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Categoria *</label>
+                                    <select class="form-select" id="categoriaProduto" required>
+                                        <option value="">Selecione uma categoria...</option>
+                                        <option value="grãos">🌾 Grãos e Cereais</option>
+                                        <option value="laticínios">🥛 Laticínios</option>
+                                        <option value="carnes">🥩 Carnes e Aves</option>
+                                        <option value="frutas">🍎 Frutas</option>
+                                        <option value="verduras">🥬 Verduras e Legumes</option>
+                                        <option value="bebidas">🥤 Bebidas</option>
+                                        <option value="limpeza">🧽 Produtos de Limpeza</option>
+                                        <option value="higiene">🧼 Higiene Pessoal</option>
+                                        <option value="outros">📦 Outros</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Emoji (Opcional)</label>
+                                    <input type="text" class="form-control" id="emojiProduto" 
+                                           placeholder="🍎" maxlength="2">
+                                    <small class="text-muted">Escolha um emoji que represente seu produto</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Descrição (Opcional)</label>
+                                    <textarea class="form-control" id="descricaoProduto" rows="3" 
+                                              placeholder="Descrição do produto..."></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Imagem do Produto</label>
+                                    <div class="upload-area" onclick="document.getElementById('imagemProduto').click()">
+                                        <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
+                                        <p class="text-muted mb-0">Clique aqui ou arraste uma imagem</p>
+                                        <small class="text-muted">JPG, PNG - Máximo 2MB</small>
+                                    </div>
+                                    <input type="file" id="imagemProduto" accept="image/jpeg,image/png,image/jpg" 
+                                           style="display: none;" onchange="processarImagem(this)">
+                                    
+                                    <div id="previewContainer" style="display: none;">
+                                        <img id="previewImagem" class="preview-image" alt="Preview">
+                                        <div class="image-controls">
+                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerImagem()">
+                                                <i class="fas fa-trash"></i> Remover Imagem
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="document.getElementById('imagemProduto').click()">
+                                                <i class="fas fa-edit"></i> Trocar Imagem
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -360,6 +426,7 @@
         let produtosLoja = [];
         let produtoModal = null;
         let produtoEditando = null;
+        let imagemAtual = null;
         
         // ===== INICIALIZAÇÃO =====
         document.addEventListener('DOMContentLoaded', function() {
@@ -371,14 +438,11 @@
         });
         
         function inicializarSistema() {
-            // Inicializar modal
             produtoModal = new bootstrap.Modal(document.getElementById('produtoModal'));
-            
-            // Carregar dados
             carregarConfiguracoes();
             carregarProdutos();
             atualizarDataAtual();
-            
+            configurarDragAndDrop();
             console.log('✅ Sistema inicializado com sucesso!');
         }
         
@@ -395,7 +459,6 @@
             lojistaAtual = JSON.parse(dadosLojista);
             console.log('✅ Lojista logado:', lojistaAtual);
             
-            // Atualizar interface
             document.getElementById('nomeLojistaNav').innerHTML = 
                 `<i class="fas fa-user-circle"></i> ${lojistaAtual.nome}`;
             document.getElementById('nomeLojistaSidebar').textContent = lojistaAtual.nome;
@@ -427,7 +490,6 @@
             
             if (!lojistaAtual) return;
             
-            // Atualizar dados
             lojistaAtual.nome = document.getElementById('configNomeLoja').value;
             lojistaAtual.whatsapp = document.getElementById('configWhatsapp').value;
             lojistaAtual.taxa = parseFloat(document.getElementById('configTaxa').value);
@@ -435,10 +497,8 @@
             lojistaAtual.endereco = document.getElementById('configEndereco').value;
             lojistaAtual.responsavel = document.getElementById('configResponsavel').value;
             
-            // Salvar
             localStorage.setItem('zapMercadoLojista', JSON.stringify(lojistaAtual));
             
-            // Atualizar interface
             document.getElementById('nomeLojistaNav').innerHTML = 
                 `<i class="fas fa-user-circle"></i> ${lojistaAtual.nome}`;
             document.getElementById('nomeLojistaSidebar').textContent = lojistaAtual.nome;
@@ -496,11 +556,18 @@
             
             let html = '';
             produtosLoja.forEach(produto => {
+                const imagemSrc = produto.imagemBase64 || 
+                    (produto.imagem && produto.imagem !== '📦' ? 
+                        `data:text/plain;charset=utf-8,${produto.imagem}` : null);
+                
                 html += `
                     <div class="col-md-4 col-lg-3 mb-4">
                         <div class="card produto-card h-100">
                             <div class="card-body text-center">
-                                <div class="produto-emoji">${produto.imagem || '📦'}</div>
+                                ${produto.imagemBase64 ? 
+                                    `<img src="${produto.imagemBase64}" class="produto-imagem" alt="${produto.nome}">` :
+                                    `<div class="produto-emoji">${produto.imagem || '📦'}</div>`
+                                }
                                 <h6 class="card-title">${produto.nome}</h6>
                                 <p class="produto-preco">R$ ${produto.preco.toFixed(2)}</p>
                                 <span class="badge bg-secondary mb-2">${produto.categoria}</span>
@@ -531,6 +598,7 @@
         
         function abrirModalProduto() {
             produtoEditando = null;
+            imagemAtual = null;
             document.getElementById('produtoModalTitle').textContent = '➕ Adicionar Produto';
             limparFormularioProduto();
             produtoModal.show();
@@ -542,13 +610,17 @@
             
             document.getElementById('produtoModalTitle').textContent = '✏️ Editar Produto';
             
-            // Preencher formulário
             document.getElementById('produtoId').value = produtoEditando.id;
             document.getElementById('nomeProduto').value = produtoEditando.nome;
             document.getElementById('precoProduto').value = produtoEditando.preco;
             document.getElementById('categoriaProduto').value = produtoEditando.categoria;
             document.getElementById('emojiProduto').value = produtoEditando.imagem || '';
             document.getElementById('descricaoProduto').value = produtoEditando.descricao || '';
+            
+            if (produtoEditando.imagemBase64) {
+                imagemAtual = produtoEditando.imagemBase64;
+                mostrarPreview(produtoEditando.imagemBase64);
+            }
             
             produtoModal.show();
         }
@@ -558,7 +630,7 @@
             const preco = parseFloat(document.getElementById('precoProduto').value);
             const categoria = document.getElementById('categoriaProduto').value;
             const emoji = document.getElementById('emojiProduto').value.trim();
-            const descricao = document.getElementById('descricaoProduto').value.trim();
+                        const descricao = document.getElementById('descricaoProduto').value.trim();
             
             // Validações
             if (!nome) {
@@ -586,6 +658,7 @@
                         preco: preco,
                         categoria: categoria,
                         imagem: emoji || '📦',
+                        imagemBase64: imagemAtual,
                         descricao: descricao
                     };
                     console.log('✅ Produto editado:', produtosLoja[index]);
@@ -599,6 +672,7 @@
                     preco: preco,
                     categoria: categoria,
                     imagem: emoji || '📦',
+                    imagemBase64: imagemAtual,
                     descricao: descricao
                 };
                 
@@ -634,6 +708,124 @@
         function limparFormularioProduto() {
             document.getElementById('formProduto').reset();
             document.getElementById('produtoId').value = '';
+            imagemAtual = null;
+            document.getElementById('previewContainer').style.display = 'none';
+        }
+
+        // ===== SISTEMA DE UPLOAD DE IMAGENS =====
+        function configurarDragAndDrop() {
+            const uploadArea = document.querySelector('.upload-area');
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                uploadArea.classList.add('dragover');
+            }
+            
+            function unhighlight() {
+                uploadArea.classList.remove('dragover');
+            }
+            
+            uploadArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    processarImagem({ files: files });
+                }
+            }
+        }
+        
+        function processarImagem(input) {
+            const file = input.files[0];
+            
+            if (!file) return;
+            
+            // Validar tipo de arquivo
+            if (!file.type.match(/^image\/(jpeg|jpg|png)$/)) {
+                alert('❌ Por favor, selecione apenas arquivos JPG ou PNG!');
+                return;
+            }
+            
+            // Validar tamanho (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('❌ A imagem deve ter no máximo 2MB!');
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    // Redimensionar se necessário
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Definir tamanho máximo
+                    const maxWidth = 800;
+                    const maxHeight = 600;
+                    
+                    let { width, height } = img;
+                    
+                    // Calcular novo tamanho mantendo proporção
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width = (width * maxHeight) / height;
+                            height = maxHeight;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Desenhar imagem redimensionada
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Converter para base64
+                    imagemAtual = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    // Mostrar preview
+                    mostrarPreview(imagemAtual);
+                };
+                
+                img.src = e.target.result;
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        function mostrarPreview(imagemBase64) {
+            document.getElementById('previewImagem').src = imagemBase64;
+            document.getElementById('previewContainer').style.display = 'block';
+        }
+        
+        function removerImagem() {
+            imagemAtual = null;
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('imagemProduto').value = '';
         }
         
         // ===== UTILITÁRIOS =====
@@ -649,3 +841,4 @@
         }
     </script>
 </body>
+</html>
