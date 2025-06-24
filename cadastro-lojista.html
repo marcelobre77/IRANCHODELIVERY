@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZapMercado - Cadastro de Lojista</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-cadastro {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            border-color: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #20B358;
+            border-color: #20B358;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card card-cadastro">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <i class="fab fa-whatsapp fa-3x text-success mb-3"></i>
+                                <h2 class="text-dark">Cadastro de Lojista</h2>
+                                <p class="text-muted">Cadastre seu negócio no ZapMercado</p>
+                            </div>
+                            
+                            <form id="formCadastro">
+                                <div class="mb-3">
+                                    <label class="form-label">🏪 Nome do Seu Negócio *</label>
+                                    <input type="text" class="form-control" id="nomeLoja" required 
+                                           placeholder="Ex: Mercado Central, Farmácia Saúde, etc.">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">📱 WhatsApp (com DDD) *</label>
+                                    <input type="tel" class="form-control" id="whatsappLoja" required 
+                                           placeholder="Ex: 11999887766" maxlength="11">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">🏪 Tipo de Negócio *</label>
+                                    <select class="form-select" id="tipoLoja" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="mercado">🛒 Mercado/Supermercado</option>
+                                        <option value="drogaria">💊 Farmácia/Drogaria</option>
+                                        <option value="frutaria">🍎 Hortifruti/Frutaria</option>
+                                        <option value="restaurante">🍕 Restaurante/Lanchonete</option>
+                                        <option value="conveniencia">🏪 Loja de Conveniência</option>
+                                        <option value="cosmeticos">🧴 Cosméticos/Perfumaria</option>
+                                        <option value="padaria">🍞 Padaria/Confeitaria</option>
+                                        <option value="outros">📦 Outros</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">🚚 Taxa de Entrega (R$) *</label>
+                                            <input type="number" class="form-control" id="taxaEntrega" 
+                                                   step="0.50" min="0" max="50" required placeholder="Ex: 3.50">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">⏱️ Tempo de Entrega *</label>
+                                            <input type="text" class="form-control" id="tempoEntrega" required 
+                                                   placeholder="Ex: 20-30 min">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">📍 Endereço Completo *</label>
+                                    <textarea class="form-control" id="enderecoLoja" rows="2" required 
+                                              placeholder="Rua, número, bairro, cidade - estado"></textarea>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label">👤 Seu Nome (Responsável) *</label>
+                                    <input type="text" class="form-control" id="nomeResponsavel" required 
+                                           placeholder="Seu nome completo">
+                                </div>
+                                
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="aceitoTermos" required>
+                                    <label class="form-check-label" for="aceitoTermos">
+                                        Aceito os <a href="#" class="text-success">termos de uso</a> e 
+                                        <a href="#" class="text-success">política de privacidade</a>
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-whatsapp w-100 py-3">
+                                    <i class="fas fa-store"></i> Cadastrar Minha Loja
+                                </button>
+                            </form>
+                            
+                            <div class="text-center mt-4">
+                                <p class="text-muted">Já tem cadastro? 
+                                    <a href="login-lojista.html" class="text-success">Faça login aqui</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('formCadastro').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Coletar dados do formulário
+            const dadosLojista = {
+                id: Date.now(), // ID único
+                nome: document.getElementById('nomeLoja').value,
+                whatsapp: document.getElementById('whatsappLoja').value,
+                tipo: document.getElementById('tipoLoja').value,
+                taxa: parseFloat(document.getElementById('taxaEntrega').value),
+                tempo: document.getElementById('tempoEntrega').value,
+                endereco: document.getElementById('enderecoLoja').value,
+                responsavel: document.getElementById('nomeResponsavel').value,
+                dataCadastro: new Date().toLocaleString('pt-BR'),
+                ativo: true
+            };
+            
+            // Salvar no localStorage
+            localStorage.setItem('zapMercadoLojista', JSON.stringify(dadosLojista));
+            
+            // Mostrar sucesso
+            alert(`✅ Cadastro realizado com sucesso!
+
+🏪 Loja: ${dadosLojista.nome}
+📱 WhatsApp: ${dadosLojista.whatsapp}
+👤 Responsável: ${dadosLojista.responsavel}
+
+Redirecionando para o painel...`);
+            
+            // Redirecionar para o painel
+            setTimeout(() => {
+                window.location.href = 'lojista.html';
+            }, 2000);
+        });
+        
+        // Máscara para WhatsApp
+        document.getElementById('whatsappLoja').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
